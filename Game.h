@@ -32,6 +32,8 @@ public:
     {return computer_sunk;}
     int get_player_sunk()
     {return player_sunk;}
+    bool is_easy()
+    {return easy;}
 
     // Disallow copy/move construction or assignment
     Game(Game& obj) = delete;
@@ -59,13 +61,20 @@ private:
     bool is_valid(std::vector<int>& positions, const std::vector<std::vector<char>>& grid,
         int position, int direction, int ship_length);
 
+    // Get user's input and check if it is valid
+    void read_position(std::string& position);
+
+    // Convert a char to a ship name
+    void convert_char_to_ship(char ship_char, std::string& ship, int& which_ship);
+
     // Boards
     std::vector<std::vector<char>> computer_grid, player_grid;
 
     // How many shots a ship has taken + sunk or not
     std::vector<std::pair<int, int>> computer_ships, player_ships;
 
-    int computer_sunk, player_sunk;
+    int computer_sunk, player_sunk, row_prev, col_prev;
+    bool easy;
 };
 
 #endif

@@ -14,7 +14,4 @@ private:
     const char* msg;
 };
 
-// Get user's input and check if it is valid
-void read_position(std::string& position);
-
 #endif

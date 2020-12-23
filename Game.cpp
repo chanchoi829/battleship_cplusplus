@@ -8,6 +8,33 @@ using namespace std;
 
 // Reset grids
 void Game::reset() {
+    row_prev = -1;
+    col_prev = -1;
+
+    string difficulty;
+    while (true) {
+        try {
+            cout << "Example: hard\nChoose difficulty easy/hard: ";
+            cin >> difficulty;
+            cout << endl;
+
+            transform(difficulty.begin(), difficulty.end(), difficulty.begin(),
+                [](unsigned char c){ return tolower(c); });
+
+            if (difficulty == "easy")
+                easy = true;
+            else if (difficulty == "hard")
+                easy = false;
+            else
+                throw Error("Enter a valid difficulty!\n");
+        }
+        // If an Error is thrown, skip rest of the line.
+        catch (Error& e) {
+            cout << e.what() << endl;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    }
+
     computer_grid = vector<vector<char>> (10, vector<char>(10, '.'));
     player_grid = vector<vector<char>> (10, vector<char>(10, '.'));
 
@@ -35,8 +62,35 @@ void Game::reset() {
 // Simulate computer's turn
 void Game::computer_turn() {
     while (true) {
-        int position = rand() % 100;
-        int row = position / 10, col = position % 10;
+        int row, col, position;
+
+        // Easy mode
+        if (easy || row_prev == -1) {
+            int position = rand() % 100;
+            row = position / 10;
+            col = position % 10;
+        }
+        // Hard mode
+        else {
+            if (row_prev - 1 >= 0 && player_grid[row_prev - 1][col_prev] != 'o' && player_grid[row_prev - 1][col_prev] != 'x') {
+                row = row_prev - 1;
+                col = col_prev;
+            }
+            else if (row_prev + 1 <= 9 && player_grid[row_prev + 1][col_prev] != 'o' && player_grid[row_prev + 1][col_prev] != 'x') {
+                row = row_prev + 1;
+                col = col_prev;
+            }
+            else if (col_prev - 1 >= 0 && player_grid[row_prev][col_prev - 1] != 'o' && player_grid[row_prev][col_prev - 1] != 'x') {
+                row = row_prev;
+                col = col_prev - 1;
+            }
+            else {
+                row = row_prev;
+                col = col_prev + 1;
+            }
+
+            position = row * 10 + col;
+        }
 
         if (player_grid[row][col] != 'o' && player_grid[row][col] != 'x') {
             cout << "Computer attacks " << string(1, (position / 10) + 'A') << (position % 10) << ". "; 
@@ -48,33 +102,22 @@ void Game::computer_turn() {
             else {
                 int which_ship;
                 string ship;
-                if (player_grid[row][col] == 'd') {
-                    which_ship = 0;
-                    ship = "Destroyer";
-                }
-                else if (player_grid[row][col] == 's') {
-                    which_ship = 1;
-                    ship = "Submarine";
-                }
-                else if (player_grid[row][col] == 'c') {
-                    which_ship = 2;
-                    ship = "Cruiser";
-                }
-                else if (player_grid[row][col] == 'b') {
-                    which_ship = 3;
-                    ship = "Battleship";
-                }
-                else {
-                    which_ship = 4;
-                    ship = "Carrier";
-                }
+                convert_char_to_ship(player_grid[row][col], ship, which_ship);
 
                 ++player_ships[which_ship].first;
 
-                if (player_ships[which_ship].first == player_ships[which_ship].second)
+                if (player_ships[which_ship].first == player_ships[which_ship].second) {
                     cout << "Hit! Your " << ship << " has been sunk!" << endl;
-                else
+                    row_prev = -1;
+                    col_prev = -1;
+                }
+                else {
                     cout << "Hit!" << endl;
+
+                    // Save the point for the hard mode
+                    row_prev = row;
+                    col_prev = col;
+                }
 
                 player_grid[row][col] = 'x';
             }
@@ -118,26 +161,7 @@ void Game::player_turn() {
             int which_ship;
             string ship;
 
-            if (computer_grid[row][col] == 'd') {
-                which_ship = 0;
-                ship = "Destroyer";
-            }
-            else if (computer_grid[row][col] == 's') {
-                which_ship = 1;
-                ship = "Submarine";
-            }
-            else if (computer_grid[row][col] == 'c') {
-                which_ship = 2;
-                ship = "Cruiser";
-            }
-            else if (computer_grid[row][col] == 'b') {
-                which_ship = 3;
-                ship = "Battleship";
-            }
-            else {
-                which_ship = 4;
-                ship = "Carrier";
-            }
+            convert_char_to_ship(computer_grid[row][col], ship, which_ship);
 
             ++computer_ships[which_ship].first;
 
@@ -330,6 +354,48 @@ bool Game::is_valid(vector<int>& positions, const vector<vector<char>>& grid, in
     }
 
     return ship_fits;
+}
+
+// Get user's input and check if it is valid
+void Game::read_position(std::string& position) {
+    cin >> position;
+
+    transform(position.begin(), position.end(), position.begin(),
+        [](unsigned char c){ return tolower(c); });
+
+    // Check the input
+    if ((position.length() != 2 && position.length() != 3) || (position[0] < 'a' || position[0] > 'j'))
+        throw Error("Enter a valid answer!\n");
+
+    if (position.length() == 2 && (position[1] < '1' || position[1] > '9'))
+        throw Error("Enter a valid answer!\n");
+
+    if (position.length() == 3 && (position[1] != '1' || position[2] != '0'))
+        throw Error("Enter a valid answer!\n");
+}
+
+// Convert a char to a ship name
+void Game::convert_char_to_ship(char ship_char, string& ship, int& which_ship) {
+    if (ship_char == 'd') {
+        which_ship = 0;
+        ship = "Destroyer";
+    }
+    else if (ship_char == 's') {
+        which_ship = 1;
+        ship = "Submarine";
+    }
+    else if (ship_char == 'c') {
+        which_ship = 2;
+        ship = "Cruiser";
+    }
+    else if (ship_char == 'b') {
+        which_ship = 3;
+        ship = "Battleship";
+    }
+    else {
+        which_ship = 4;
+        ship = "Carrier";
+    }
 }
 
 // For Singleton
