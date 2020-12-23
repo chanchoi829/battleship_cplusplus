@@ -1,6 +1,7 @@
 #include "Model.h"
 #include "Ship.h"
 #include "Utility.h"
+#include "View.h"
 #include <algorithm>
 #include <iostream>
 #include <stdlib.h>
@@ -8,9 +9,8 @@
 using namespace std;
 
 Model::Model() {
-
+    view_ptr = make_shared<View>();
 }
-
 
 // Reset boards
 void Model::reset() {
@@ -65,6 +65,7 @@ void Model::place_player_ship(const string& ship) {
         try {
             string position;
 
+            view_ptr->draw_player_board();
             cout << "\nExample: G5\nPlace your " << ship << "(length " << ship_length << "): ";
             cin >> position;
 
@@ -116,7 +117,6 @@ void Model::place_player_ship(const string& ship) {
                 player_board[pos / 10][pos % 10] = ship_letter;
 
             player_ships.push_back(make_pair(0, false));
-
             break;
         }
         // If an Error is thrown, skip rest of the line.
@@ -130,11 +130,11 @@ void Model::place_player_ship(const string& ship) {
 void Model::check_ship_type(const string& ship, int& ship_length, char& ship_letter) {
     if (ship == "Destroyer") {
         ship_length = 2;
-        ship_letter = 'D';
+        ship_letter = 'd';
     }
     else if (ship == "Submarine") {
         ship_length = 3;
-        ship_letter = 'S';
+        ship_letter = 's';
     }
     else if (ship == "Cruiser"){ 
         ship_length = 3;
@@ -142,7 +142,7 @@ void Model::check_ship_type(const string& ship, int& ship_length, char& ship_let
     }
     else if (ship == "Battleship") {
         ship_length = 4;
-        ship_letter = 'B';
+        ship_letter = 'b';
     }
     else {
         ship_length = 5;

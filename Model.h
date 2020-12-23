@@ -21,6 +21,8 @@ public:
 
     // For Singleton
     static Model& get_instance();
+    std::vector<std::vector<char>>& get_player_board()
+    {return player_board;}
 
     // Disallow copy/move construction or assignment
     Model(Model& obj) = delete;
@@ -54,6 +56,7 @@ private:
     // How many shots a ship has taken + sunk or not
     std::vector<std::pair<int, bool>> computer_ships, player_ships;
 
+    std::shared_ptr<View> view_ptr;
 };
 
 #endif
