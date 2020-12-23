@@ -6,8 +6,7 @@ using namespace std;
 
 // The main function creates the Controller object, then tells it to run.
 
-int main()
-{
+int main() {
 	try {
 		// create the Controller and go
 		Controller controller;
@@ -20,6 +19,4 @@ int main()
 	catch (...) {
 		cout << "Unknown exception caught" << endl;
 	}
-
-	return 0;
 }

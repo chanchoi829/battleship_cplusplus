@@ -20,7 +20,6 @@ void Controller::run() {
         try {
             
             Model::get_instance().reset();
-            
 
             if (!restart())
                 return;
@@ -37,9 +36,6 @@ bool Controller::restart() {
     string command;
     while (true) {
         try {
-            
-            Model::get_instance().reset();
-
             cout << "Restart?\nType yes or no" << endl;
 
             cin >> command;
