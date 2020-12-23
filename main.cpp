@@ -8,7 +8,6 @@ using namespace std;
 
 int main()
 {
-
 	try {
 		// create the Controller and go
 		Controller controller;

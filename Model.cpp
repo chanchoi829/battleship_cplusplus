@@ -6,29 +6,29 @@
 using namespace std;
 
 Model::Model() {
-    reset();
+
 }
 
 
 // Reset boards
 void Model::reset() {
-    computer_board = vector<vector<char>> (10, vector<char>('.', 10));
-    player_board = vector<vector<char>> (10, vector<char>('.', 10));
+    computer_board = vector<vector<char>> (10, vector<char>(10, '.'));
+    player_board = vector<vector<char>> (10, vector<char>(10, '.'));
 
     computer_ships.clear();
     player_ships.clear();
 
     // Create computer's board
-    place_ship("Destroyer");
-    place_ship("Submarine");
-    place_ship("Cruiser");
-    place_ship("Battleship");
-    place_ship("Carrier");
+    place_computer_ship("Destroyer");
+    place_computer_ship("Submarine");
+    place_computer_ship("Cruiser");
+    place_computer_ship("Battleship");
+    place_computer_ship("Carrier");
 
 }
 
 // Place a ship on the computer's board
-void Model::place_ship(const string& ship) {
+void Model::place_computer_ship(const string& ship) {
     int ship_length;
     char ship_letter;
 
@@ -54,37 +54,39 @@ void Model::place_ship(const string& ship) {
     }
 
     // Direction: left, up, right, down
-    vector<int> directions = {-1, -10, 1, 10}, positions;
+    vector<int> positions, directions = {-1, -10, 1, 10};;
 
-    // Check if the ship fits
-    bool ship_fits = false;
     // Generate random positions until the ship fits
-    while (!ship_fits) {
-        positions.clear();
-        int position = rand() % 100, direction = rand() % 4;
-        
-        ship_fits = true;
-        for (int i = 0; i < ship_length; ++i) {
-            int row = position / 10, col = position % 10;
-
-            // Check if the position is in range and if the ship can fit
-            if (position < 0 || position > 99 || computer_board[row][col] != '.') {
-                ship_fits = false;
-                break;
-            }
-
-            positions.push_back(position);
-            position += directions[direction];
-        }
-    }
+    while (!is_valid(positions, computer_board, rand() % 100, directions[rand() % 4], ship_length)) {}
 
     // Place the ship
     for (int position : positions)
         computer_board[position / 10][position % 10] = ship_letter;
 
     computer_ships.push_back(make_pair(0, false));
+}
 
+bool Model::is_valid(vector<int>& positions, const vector<vector<char>>& board, int position, int direction, int ship_length) {
+    positions.clear();
 
+    // Check if the ship fits
+    bool ship_fits = true;
+
+    ship_fits = true;
+    for (int i = 0; i < ship_length; ++i) {
+        int row = position / 10, col = position % 10;
+
+        // Check if the position is in range and if the ship can fit
+        if (position < 0 || position > 99 || computer_board[row][col] != '.') {
+            ship_fits = false;
+            break;
+        }
+
+        positions.push_back(position);
+        position += direction;
+    }
+
+    return ship_fits;
 }
 
 // For Singleton

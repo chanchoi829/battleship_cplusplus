@@ -1,0 +1,12 @@
+# .gitignore
+
+# Object files
+*.o
+
+# Visual Studio files
+/.vs
+/Debug
+battleship_cplusplus.sln
+battleship_cplusplus.vcxproj
+battleship_cplusplus.vcxproj.filters
+battleship_cplusplus.vcxproj.user

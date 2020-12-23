@@ -33,7 +33,9 @@ private:
     Model();
     ~Model(){}
 
-    void place_ship(const std::string& ship);
+    void place_computer_ship(const std::string& ship);
+    bool is_valid(std::vector<int>& positions, const std::vector<std::vector<char>>& board,
+        int position, int direction, int ship_length);
 
     std::vector<std::vector<char>> computer_board, player_board;
     std::vector<std::pair<int, bool>> computer_ships, player_ships;
