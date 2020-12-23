@@ -27,15 +27,106 @@ void Game::reset() {
     place_player_ship("Cruiser");
     place_player_ship("Battleship");
     place_player_ship("Carrier");
+
+    computer_sunk = 0;
+    player_sunk = 0;
 }
 
-// Draw
+void Game::computer_turn() {
+
+}
+
+void Game::player_turn() {
+    while (true) {
+        try {
+            draw_player_grid();
+            cout << "\nExample: G5\nAttack a point: ";
+            
+            string position;
+            read_position(position);
+            int row = position[0] - 'a', col = position.length() == 3 ? 9 : position[1] - '1';
+
+            if (computer_grid[row][col] == 'o' || computer_grid[row][col] == 'x')
+                throw Error("Already attacked this point!\n");
+
+            if (computer_grid[row][col] == '.') {
+                cout << "Miss!" << endl;
+                computer_grid[row][col] = 'o';
+                return;
+            }
+
+            cout << "Hit!" << endl;
+
+            int which_ship;
+            string ship;
+
+            if (computer_grid[row][col] == 'd') {
+                which_ship = 0;
+                ship = "Destroyer";
+            }
+            else if (computer_grid[row][col] == 's') {
+                which_ship = 1;
+                ship = "Submarine";
+            }
+            else if (computer_grid[row][col] == 'c') {
+                which_ship = 2;
+                ship = "Cruiser";
+            }
+            else if (computer_grid[row][col] == 'b') {
+                which_ship = 3;
+                ship = "Battleship";
+            }
+            else {
+                which_ship = 4;
+                ship = "Carrier";
+            }
+
+            ++computer_ships[which_ship].first;
+
+            if (computer_ships[which_ship].first ==
+                computer_ships[which_ship].second) {
+                cout << "Computer's " << ship << " sunk!" << endl;
+            }
+
+            computer_grid[row][col] = 'x';
+            return;
+        }
+        // If an Error is thrown, skip rest of the line.
+        catch (Error& e) {
+            cout << e.what() << endl;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        }
+    }
+}
+
+// Draw computer's grid
 void Game::draw_computer_grid() {
+   cout << "      Enemy Grid\n\n  ";
 
+    for (char i = '1'; i <= '9'; ++i) {
+        cout << i << " ";
+    }
+
+    cout << "10" << endl;
+
+    for (char i = 'A'; i <= 'J'; ++i) {
+        cout << string(1, i) << " ";
+
+
+        for (int j = 0; j < 10; ++j) {
+            char tmp = computer_grid[i - 'A'][j];
+            if (tmp != '.' && tmp != 'o' && tmp != 'x')
+                tmp = '.';
+            cout << tmp << " ";
+        }
+
+        cout << endl << endl;
+    } 
 }
 
+// Draw player's grid
 void Game::draw_player_grid() {
-    cout << "      Your Board\n\n  ";
+    cout << "      Your Grid\n\n  ";
 
     for (char i = '1'; i <= '9'; ++i) {
         cout << i << " ";
@@ -70,7 +161,7 @@ void Game::place_computer_ship(const string& ship) {
     for (int position : positions)
         computer_grid[position / 10][position % 10] = ship_letter;
 
-    computer_ships.push_back(make_pair(0, false));
+    computer_ships.push_back(make_pair(0, ship_length));
 }
 
 void Game::place_player_ship(const string& ship) {
@@ -81,28 +172,14 @@ void Game::place_player_ship(const string& ship) {
 
     while (true) {
         try {
-            string position;
-
             draw_player_grid();
             cout << "\nExample: G5\nPlace your " << ship << "(length " << ship_length << "): ";
-            cin >> position;
-
-            transform(position.begin(), position.end(), position.begin(),
-                [](unsigned char c){ return tolower(c); });
-
-            // Check the input
-            if ((position.length() != 2 && position.length() != 3) || (position[0] < 'a' || position[0] > 'j'))
-                throw Error("Enter a valid answer!\n");
-
-            if (position.length() == 2 && (position[1] < '1' || position[1] > '9'))
-                throw Error("Enter a valid answer!\n");
-
-            if (position.length() == 3 && (position[1] != '1' || position[2] != '0'))
-                throw Error("Enter a valid answer!\n");
-
-            string direction;
+            
+            string position;
+            read_position(position);
 
             cout << "\nExample: right\nEnter the direction(left/right/up/down): ";
+            string direction;
             cin >> direction;
             
             transform(direction.begin(), direction.end(), direction.begin(),
@@ -134,7 +211,7 @@ void Game::place_player_ship(const string& ship) {
             for (int pos : positions)
                 player_grid[pos / 10][pos % 10] = ship_letter;
 
-            player_ships.push_back(make_pair(0, false));
+            player_ships.push_back(make_pair(0, ship_length));
             break;
         }
         // If an Error is thrown, skip rest of the line.
@@ -194,6 +271,6 @@ bool Game::is_valid(vector<int>& positions, const vector<vector<char>>& grid, in
 
 // For Singleton
 Game& Game::get_instance() {
-    static Game the_model;
-    return the_model;
+    static Game the_game;
+    return the_game;
 }

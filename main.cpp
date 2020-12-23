@@ -6,7 +6,11 @@
 
 using namespace std;
 
+#define game Game::get_instance()
+
+// Run the game
 void run();
+// Restart the battleship game
 bool restart();
 
 int main() {
@@ -22,15 +26,41 @@ int main() {
     }
 }
 
+// Run the game
 void run() {
     while (true) {
         try {
-            Game::get_instance().reset();
 
-            if (!restart())
+            // Reset the game
+            game.reset();
+            cout << "Game Start!" << endl;
+
+            while (true) {
+                // Print computer & player grids
+                game.draw_computer_grid();
+                cout << endl;
+
+                // Player's turn
+                game.player_turn();
+                if (game.get_computer_sunk() == 5) {
+                    cout << "You Win!" << endl;
+                    break;
+                }
+
+                // Computer's turn
+                game.computer_turn();
+                if (game.get_player_sunk() == 5) {
+                    cout << "You lose!" << endl;
+                    break;
+                }
+            }
+
+            if (!restart()) {
+                cout << "Done" << endl;
                 return;
             }
-            // If an Error is thrown, skip rest of the line.
+        }
+        // If an Error is thrown, skip rest of the line.
         catch (Error& e) {
             cout << e.what() << endl;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -38,6 +68,7 @@ void run() {
     }
 }
 
+// Restart the battleship game
 bool restart() {
     string command;
     while (true) {

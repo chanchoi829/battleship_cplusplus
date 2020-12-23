@@ -16,12 +16,20 @@ public:
 
     // Reset grids
     void reset();
+    void computer_turn();
+    void player_turn();
     void draw_computer_grid();
     void draw_player_grid();
     // For Singleton
     static Game& get_instance();
     std::vector<std::vector<char>>& get_player_grid()
     {return player_grid;}
+
+    // Getters
+    int get_computer_sunk()
+    {return computer_sunk;}
+    int get_player_sunk()
+    {return player_sunk;}
 
     // Disallow copy/move construction or assignment
     Game(Game& obj) = delete;
@@ -53,7 +61,9 @@ private:
     std::vector<std::vector<char>> computer_grid, player_grid;
 
     // How many shots a ship has taken + sunk or not
-    std::vector<std::pair<int, bool>> computer_ships, player_ships;
+    std::vector<std::pair<int, int>> computer_ships, player_ships;
+
+    int computer_sunk, player_sunk;
 };
 
 #endif
