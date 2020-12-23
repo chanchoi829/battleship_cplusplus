@@ -27,6 +27,8 @@ void Game::reset() {
                 easy = false;
             else
                 throw Error("Enter a valid difficulty!\n");
+
+            break;
         }
         // If an Error is thrown, skip rest of the line.
         catch (Error& e) {
@@ -66,7 +68,7 @@ void Game::computer_turn() {
 
         // Easy mode
         if (easy || row_prev == -1) {
-            int position = rand() % 100;
+            position = rand() % 100;
             row = position / 10;
             col = position % 10;
         }
@@ -75,25 +77,32 @@ void Game::computer_turn() {
             if (row_prev - 1 >= 0 && player_grid[row_prev - 1][col_prev] != 'o' && player_grid[row_prev - 1][col_prev] != 'x') {
                 row = row_prev - 1;
                 col = col_prev;
+                position = row * 10 + col;
             }
             else if (row_prev + 1 <= 9 && player_grid[row_prev + 1][col_prev] != 'o' && player_grid[row_prev + 1][col_prev] != 'x') {
                 row = row_prev + 1;
                 col = col_prev;
+                position = row * 10 + col;
             }
             else if (col_prev - 1 >= 0 && player_grid[row_prev][col_prev - 1] != 'o' && player_grid[row_prev][col_prev - 1] != 'x') {
                 row = row_prev;
                 col = col_prev - 1;
+                position = row * 10 + col;
             }
-            else {
+            else if (col_prev + 1 >= 0 && player_grid[row_prev][col_prev + 1] != 'o' && player_grid[row_prev][col_prev + 1] != 'x') {
                 row = row_prev;
                 col = col_prev + 1;
+                position = row * 10 + col;
             }
-
-            position = row * 10 + col;
+            else {
+                position = rand() % 100;
+                row = position / 10;
+                col = position % 10;
+            }
         }
 
         if (player_grid[row][col] != 'o' && player_grid[row][col] != 'x') {
-            cout << "Computer attacks " << string(1, (position / 10) + 'A') << (position % 10) << ". "; 
+            cout << "Computer attacks " << string(1, (position / 10) + 'A') << (position % 10) + 1 << ". "; 
             if (player_grid[row][col] == '.') {
                 player_grid[row][col] = 'o';
 
