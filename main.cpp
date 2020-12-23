@@ -3,6 +3,7 @@
 #include <iostream>
 #include <exception>
 #include <algorithm>
+#include <ctime>
 
 using namespace std;
 
@@ -15,6 +16,8 @@ bool restart();
 
 int main() {
 	try {
+        // Set the seed for rand()
+        srand (time(NULL));
         run();
     }
     // catch all exceptions not handled
@@ -33,13 +36,9 @@ void run() {
 
             // Reset the game
             game.reset();
-            cout << "Game Start!" << endl;
+            cout << "***************************\nGame Start!" << endl;
 
             while (true) {
-                // Print computer & player grids
-                game.draw_computer_grid();
-                cout << endl;
-
                 // Player's turn
                 game.player_turn();
                 if (game.get_computer_sunk() == 5) {

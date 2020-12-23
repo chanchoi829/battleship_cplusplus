@@ -87,7 +87,17 @@ void Game::computer_turn() {
 void Game::player_turn() {
     while (true) {
         try {
+            // Draw grids
+            draw_computer_grid();
+            cout << endl;
             draw_player_grid();
+
+            cout << "***************************" << endl;
+            cout << "Computer's Destroyer: " << (computer_ships[0].first == computer_ships[0].second ? "sunk" : "afloat") << endl;
+            cout << "Computer's Submarine: " << (computer_ships[1].first == computer_ships[1].second ? "sunk" : "afloat") << endl;
+            cout << "Computer's Cruiser: " << (computer_ships[2].first == computer_ships[2].second ? "sunk" : "afloat") << endl;
+            cout << "Computer's Battleship: " << (computer_ships[3].first == computer_ships[3].second ? "sunk" : "afloat") << endl;
+            cout << "Computer's Carrier: " << (computer_ships[4].first == computer_ships[4].second ? "sunk" : "afloat") << endl;
             cout << "\nExample: G5\nAttack a point: ";
             
             string position;
