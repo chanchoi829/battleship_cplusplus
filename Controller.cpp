@@ -18,7 +18,6 @@ void Controller::run() {
     string command;
     while (true) {
         try {
-            
             Model::get_instance().reset();
 
             if (!restart())

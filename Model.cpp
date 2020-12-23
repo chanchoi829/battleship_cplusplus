@@ -65,9 +65,8 @@ void Model::place_player_ship(const string& ship) {
         try {
             string position;
 
-            cout << "Example: G5\nPlace your " << ship << ": ";
+            cout << "\nExample: G5\nPlace your " << ship << "(length " << ship_length << "): ";
             cin >> position;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             transform(position.begin(), position.end(), position.begin(),
                 [](unsigned char c){ return tolower(c); });
@@ -84,9 +83,9 @@ void Model::place_player_ship(const string& ship) {
 
             string direction;
 
-            cout << "Example: right\nEnter the direction(left/right/up/down): ";
+            cout << "\nExample: right\nEnter the direction(left/right/up/down): ";
             cin >> direction;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            
             transform(direction.begin(), direction.end(), direction.begin(),
                 [](unsigned char c){ return tolower(c); });
 
@@ -107,7 +106,7 @@ void Model::place_player_ship(const string& ship) {
             vector<int> positions;
 
             // Convert position to a number (0 ~ 99)
-            int position_converted = (position[0] - 'a') * 10 + position.length() == 2 ? position[1] - '1' : 9;
+            int position_converted = (position[0] - 'a') * 10 + (position.length() == 2 ? position[1] - '1' : 9);
 
             if (!is_valid(positions, player_board, position_converted, direction_converted, ship_length))
                 throw Error("Ship does not fit!\n");
@@ -117,6 +116,8 @@ void Model::place_player_ship(const string& ship) {
                 player_board[pos / 10][pos % 10] = ship_letter;
 
             player_ships.push_back(make_pair(0, false));
+
+            break;
         }
         // If an Error is thrown, skip rest of the line.
         catch (Error& e) {
@@ -160,7 +161,8 @@ bool Model::is_valid(vector<int>& positions, const vector<vector<char>>& board, 
         int row = position / 10, col = position % 10;
 
         // Check if the position is in range and if the ship can fit
-        if (position < 0 || position > 99 || computer_board[row][col] != '.') {
+        if (position < 0 || position > 99 || (position % 10 == 0 && direction == -1) || (position % 10 == 9 && direction == 1)
+            || board[row][col] != '.') {
             ship_fits = false;
             break;
         }
