@@ -4,7 +4,7 @@ LD = g++
 CFLAGS = -c -pedantic-errors -std=c++14 -Wall
 LFLAGS = -pedantic-errors -Wall
 
-OBJS = main.o Model.o View.o Controller.o Ship.o Utility.o
+OBJS = main.o Model.o View.o Controller.o Utility.o
 PROG = battleship
 
 default: $(PROG)
@@ -23,9 +23,6 @@ View.o: View.cpp View.h
 
 Controller.o: Controller.cpp Controller.h 
 	$(CC) $(CFLAGS) Controller.cpp
-
-Ship.o: Ship.cpp Ship.h
-	$(CC) $(CFLAGS) Ship.cpp
 
 Utility.o: Utility.cpp Utility.h
 	$(CC) $(CFLAGS) Utility.cpp

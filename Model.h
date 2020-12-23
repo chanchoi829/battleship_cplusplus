@@ -6,15 +6,17 @@ Model class
 #define MODEL_H
 
 #include <memory>
+#include <string>
+#include <utility>
 #include <vector>
 
-class Ship;
 class View;
 
 class Model {
 
 public:
 
+    // Reset boards
     void reset();
 
     // For Singleton
@@ -31,8 +33,10 @@ private:
     Model();
     ~Model(){}
 
+    void place_ship(const std::string& ship);
+
     std::vector<std::vector<char>> computer_board, player_board;
-    std::vector<std::shared_ptr<Ship>> computer_ships, player_ships;
+    std::vector<std::pair<int, bool>> computer_ships, player_ships;
 
 };
 

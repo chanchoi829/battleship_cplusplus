@@ -12,7 +12,6 @@ int main()
 	try {
 		// create the Controller and go
 		Controller controller;
-
 		controller.run();
 	}
 	// catch all exceptions not handled by Controller
