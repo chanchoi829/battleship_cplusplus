@@ -32,10 +32,58 @@ void Game::reset() {
     player_sunk = 0;
 }
 
+// Simulate computer's turn
 void Game::computer_turn() {
+    while (true) {
+        int position = rand() % 100;
+        int row = position / 10, col = position % 10;
 
+        if (player_grid[row][col] != 'o' && player_grid[row][col] != 'x') {
+            cout << "Computer attacks " << string(1, (position / 10) + 'A') << (position % 10) << ". "; 
+            if (player_grid[row][col] == '.') {
+                player_grid[row][col] = 'o';
+
+                cout <<  "Missed!" << endl;
+            }
+            else {
+                int which_ship;
+                string ship;
+                if (player_grid[row][col] == 'd') {
+                    which_ship = 0;
+                    ship = "Destroyer";
+                }
+                else if (player_grid[row][col] == 's') {
+                    which_ship = 1;
+                    ship = "Submarine";
+                }
+                else if (player_grid[row][col] == 'c') {
+                    which_ship = 2;
+                    ship = "Cruiser";
+                }
+                else if (player_grid[row][col] == 'b') {
+                    which_ship = 3;
+                    ship = "Battleship";
+                }
+                else {
+                    which_ship = 4;
+                    ship = "Carrier";
+                }
+
+                ++player_ships[which_ship].first;
+
+                if (player_ships[which_ship].first == player_ships[which_ship].second)
+                    cout << "Hit! Your " << ship << " has been sunk!" << endl;
+                else
+                    cout << "Hit!" << endl;
+
+                player_grid[row][col] = 'x';
+            }
+            return;
+        }
+    }
 }
 
+// Simulate player's turn
 void Game::player_turn() {
     while (true) {
         try {
@@ -85,6 +133,7 @@ void Game::player_turn() {
 
             if (computer_ships[which_ship].first ==
                 computer_ships[which_ship].second) {
+                ++computer_sunk;
                 cout << "Computer's " << ship << " sunk!" << endl;
             }
 
@@ -137,8 +186,12 @@ void Game::draw_player_grid() {
     for (char i = 'A'; i <= 'J'; ++i) {
         cout << string(1, i) << " ";
 
-        for (int j = 0; j < 10; ++j)
-            cout << player_grid[i - 'A'][j] << " ";
+        for (int j = 0; j < 10; ++j) {
+            char tmp = player_grid[i - 'A'][j];
+            if (tmp == 'o')
+                tmp = '.';
+            cout << tmp << " ";
+        }
 
         cout << endl << endl;
     }

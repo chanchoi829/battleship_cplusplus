@@ -16,7 +16,9 @@ public:
 
     // Reset grids
     void reset();
+    // Simulate computer's turn
     void computer_turn();
+    // Simulate player's turn
     void player_turn();
     void draw_computer_grid();
     void draw_player_grid();
