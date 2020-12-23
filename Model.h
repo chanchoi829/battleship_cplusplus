@@ -1,9 +1,21 @@
+/*
+Model class
+*/
+
 #ifndef MODEL_H
 #define MODEL_H
+
+#include <memory>
+#include <vector>
+
+class Ship;
+class View;
 
 class Model {
 
 public:
+
+    void reset();
 
     // For Singleton
     static Model& get_instance();
@@ -18,6 +30,9 @@ private:
     // create the initial objects
     Model();
     ~Model(){}
+
+    std::vector<std::vector<char>> computer_board, player_board;
+    std::vector<std::shared_ptr<Ship>> computer_ships, player_ships;
 
 };
 
