@@ -4,7 +4,7 @@ LD = g++
 CFLAGS = -c -pedantic-errors -std=c++14 -Wall
 LFLAGS = -pedantic-errors -Wall
 
-OBJS = main.o Model.o View.o Controller.o Utility.o
+OBJS = main.o Game.o Utility.o
 PROG = battleship
 
 default: $(PROG)
@@ -12,17 +12,11 @@ default: $(PROG)
 $(PROG): $(OBJS)
 	$(LD) $(LFLAGS) $(OBJS) -o $(PROG)
 
-main.o: main.cpp Controller.h
+main.o: main.cpp
 	$(CC) $(CFLAGS) main.cpp
 
-Model.o: Model.cpp Model.h 
-	$(CC) $(CFLAGS) Model.cpp
-
-View.o: View.cpp View.h
-	$(CC) $(CFLAGS) View.cpp
-
-Controller.o: Controller.cpp Controller.h 
-	$(CC) $(CFLAGS) Controller.cpp
+Game.o: Game.cpp Game.h 
+	$(CC) $(CFLAGS) Game.cpp
 
 Utility.o: Utility.cpp Utility.h
 	$(CC) $(CFLAGS) Utility.cpp

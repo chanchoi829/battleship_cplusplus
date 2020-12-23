@@ -1,33 +1,27 @@
-#include "Model.h"
-#include "Ship.h"
+#include "Game.h"
 #include "Utility.h"
-#include "View.h"
 #include <algorithm>
 #include <iostream>
 #include <stdlib.h>
 
 using namespace std;
 
-Model::Model() {
-    view_ptr = make_shared<View>();
-}
-
-// Reset boards
-void Model::reset() {
-    computer_board = vector<vector<char>> (10, vector<char>(10, '.'));
-    player_board = vector<vector<char>> (10, vector<char>(10, '.'));
+// Reset grids
+void Game::reset() {
+    computer_grid = vector<vector<char>> (10, vector<char>(10, '.'));
+    player_grid = vector<vector<char>> (10, vector<char>(10, '.'));
 
     computer_ships.clear();
     player_ships.clear();
 
-    // Create computer's board
+    // Create computer's grid
     place_computer_ship("Destroyer");
     place_computer_ship("Submarine");
     place_computer_ship("Cruiser");
     place_computer_ship("Battleship");
     place_computer_ship("Carrier");
 
-    // Create player's board
+    // Create player's grid
     place_player_ship("Destroyer");
     place_player_ship("Submarine");
     place_player_ship("Cruiser");
@@ -35,8 +29,32 @@ void Model::reset() {
     place_player_ship("Carrier");
 }
 
-// Place a ship on the computer's board
-void Model::place_computer_ship(const string& ship) {
+// Draw
+void Game::draw_computer_grid() {
+
+}
+
+void Game::draw_player_grid() {
+    cout << "      Your Board\n\n  ";
+
+    for (char i = '1'; i <= '9'; ++i) {
+        cout << i << " ";
+    }
+
+    cout << "10" << endl;
+
+    for (char i = 'A'; i <= 'J'; ++i) {
+        cout << string(1, i) << " ";
+
+        for (int j = 0; j < 10; ++j)
+            cout << player_grid[i - 'A'][j] << " ";
+
+        cout << endl << endl;
+    }
+}
+
+// Place a ship on the computer's grid
+void Game::place_computer_ship(const string& ship) {
     int ship_length;
     char ship_letter;
 
@@ -46,16 +64,16 @@ void Model::place_computer_ship(const string& ship) {
     vector<int> positions, directions = {-1, -10, 1, 10};;
 
     // Generate random positions until the ship fits
-    while (!is_valid(positions, computer_board, rand() % 100, directions[rand() % 4], ship_length)) {}
+    while (!is_valid(positions, computer_grid, rand() % 100, directions[rand() % 4], ship_length)) {}
 
     // Place the ship
     for (int position : positions)
-        computer_board[position / 10][position % 10] = ship_letter;
+        computer_grid[position / 10][position % 10] = ship_letter;
 
     computer_ships.push_back(make_pair(0, false));
 }
 
-void Model::place_player_ship(const string& ship) {
+void Game::place_player_ship(const string& ship) {
     int ship_length;
     char ship_letter;
 
@@ -65,7 +83,7 @@ void Model::place_player_ship(const string& ship) {
         try {
             string position;
 
-            view_ptr->draw_player_board();
+            draw_player_grid();
             cout << "\nExample: G5\nPlace your " << ship << "(length " << ship_length << "): ";
             cin >> position;
 
@@ -109,12 +127,12 @@ void Model::place_player_ship(const string& ship) {
             // Convert position to a number (0 ~ 99)
             int position_converted = (position[0] - 'a') * 10 + (position.length() == 2 ? position[1] - '1' : 9);
 
-            if (!is_valid(positions, player_board, position_converted, direction_converted, ship_length))
+            if (!is_valid(positions, player_grid, position_converted, direction_converted, ship_length))
                 throw Error("Ship does not fit!\n");
 
             // Place the ship
             for (int pos : positions)
-                player_board[pos / 10][pos % 10] = ship_letter;
+                player_grid[pos / 10][pos % 10] = ship_letter;
 
             player_ships.push_back(make_pair(0, false));
             break;
@@ -127,7 +145,7 @@ void Model::place_player_ship(const string& ship) {
     }
 }
 
-void Model::check_ship_type(const string& ship, int& ship_length, char& ship_letter) {
+void Game::check_ship_type(const string& ship, int& ship_length, char& ship_letter) {
     if (ship == "Destroyer") {
         ship_length = 2;
         ship_letter = 'd';
@@ -150,7 +168,7 @@ void Model::check_ship_type(const string& ship, int& ship_length, char& ship_let
     }  
 }
 
-bool Model::is_valid(vector<int>& positions, const vector<vector<char>>& board, int position, int direction, int ship_length) {
+bool Game::is_valid(vector<int>& positions, const vector<vector<char>>& grid, int position, int direction, int ship_length) {
     positions.clear();
 
     // Check if the ship fits
@@ -162,7 +180,7 @@ bool Model::is_valid(vector<int>& positions, const vector<vector<char>>& board, 
 
         // Check if the position is in range and if the ship can fit
         if (position < 0 || position > 99 || (position % 10 == 0 && direction == -1) || (position % 10 == 9 && direction == 1)
-            || board[row][col] != '.') {
+            || grid[row][col] != '.') {
             ship_fits = false;
             break;
         }
@@ -175,7 +193,7 @@ bool Model::is_valid(vector<int>& positions, const vector<vector<char>>& board, 
 }
 
 // For Singleton
-Model& Model::get_instance() {
-    static Model the_model;
+Game& Game::get_instance() {
+    static Game the_model;
     return the_model;
 }
