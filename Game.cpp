@@ -117,6 +117,7 @@ void Game::computer_turn() {
 
                 if (player_ships[which_ship].first == player_ships[which_ship].second) {
                     cout << "Hit! Your " << ship << " has been sunk!" << endl;
+                    ++player_sunk;
                     row_prev = -1;
                     col_prev = -1;
                 }
