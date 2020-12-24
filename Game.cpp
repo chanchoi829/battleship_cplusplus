@@ -106,7 +106,7 @@ void Game::computer_turn() {
             if (player_grid[row][col] == '.') {
                 player_grid[row][col] = 'o';
 
-                cout <<  "Missed!" << endl;
+                cout << "Missed!" << endl;
             }
             else {
                 int which_ship;
@@ -146,15 +146,17 @@ void Game::player_turn() {
             draw_player_grid();
 
             cout << "***************************" << endl;
-            cout << "Computer's Destroyer: " << (computer_ships[0].first == computer_ships[0].second ? "sunk" : "afloat") << endl;
-            cout << "Computer's Submarine: " << (computer_ships[1].first == computer_ships[1].second ? "sunk" : "afloat") << endl;
-            cout << "Computer's Cruiser: " << (computer_ships[2].first == computer_ships[2].second ? "sunk" : "afloat") << endl;
-            cout << "Computer's Battleship: " << (computer_ships[3].first == computer_ships[3].second ? "sunk" : "afloat") << endl;
-            cout << "Computer's Carrier: " << (computer_ships[4].first == computer_ships[4].second ? "sunk" : "afloat") << endl;
+            cout << "Computer's Destroyer(length 2): " << (computer_ships[0].first == computer_ships[0].second ? "sunk" : "afloat") << endl;
+            cout << "Computer's Submarine(length 3): " << (computer_ships[1].first == computer_ships[1].second ? "sunk" : "afloat") << endl;
+            cout << "Computer's Cruiser(length 3): " << (computer_ships[2].first == computer_ships[2].second ? "sunk" : "afloat") << endl;
+            cout << "Computer's Battleship(length 4): " << (computer_ships[3].first == computer_ships[3].second ? "sunk" : "afloat") << endl;
+            cout << "Computer's Carrier(length 5): " << (computer_ships[4].first == computer_ships[4].second ? "sunk" : "afloat") << endl;
             cout << "\nExample: G5\nAttack a point: ";
-            
+
             string position;
             read_position(position);
+
+            // Convert to row and col
             int row = position[0] - 'a', col = position.length() == 3 ? 9 : position[1] - '1';
 
             if (computer_grid[row][col] == 'o' || computer_grid[row][col] == 'x')
@@ -175,6 +177,7 @@ void Game::player_turn() {
 
             ++computer_ships[which_ship].first;
 
+            // When hp is 0, the ship sinks
             if (computer_ships[which_ship].first ==
                 computer_ships[which_ship].second) {
                 ++computer_sunk;
@@ -196,9 +199,8 @@ void Game::player_turn() {
 void Game::draw_computer_grid() {
    cout << "      Enemy Grid\n\n  ";
 
-    for (char i = '1'; i <= '9'; ++i) {
+    for (char i = '1'; i <= '9'; ++i)
         cout << i << " ";
-    }
 
     cout << "10" << endl;
 
@@ -221,9 +223,8 @@ void Game::draw_computer_grid() {
 void Game::draw_player_grid() {
     cout << "      Your Grid\n\n  ";
 
-    for (char i = '1'; i <= '9'; ++i) {
+    for (char i = '1'; i <= '9'; ++i)
         cout << i << " ";
-    }
 
     cout << "10" << endl;
 
@@ -258,6 +259,7 @@ void Game::place_computer_ship(const string& ship) {
     for (int position : positions)
         computer_grid[position / 10][position % 10] = ship_letter;
 
+    // Set the ship's hp
     computer_ships.push_back(make_pair(0, ship_length));
 }
 
@@ -284,6 +286,7 @@ void Game::place_player_ship(const string& ship) {
 
             int direction_converted;
 
+            // Convert direction to number
             if (direction == "left")
                 direction_converted = -1;
             else if (direction == "up")
@@ -293,9 +296,8 @@ void Game::place_player_ship(const string& ship) {
             else if (direction == "down")
                 direction_converted = 10;
             else
-                throw Error("Enter a direction!\n");
+                throw Error("Enter a valid direction!\n");
 
-            // Direction: left, up, right, down
             vector<int> positions;
 
             // Convert position to a number (0 ~ 99)
@@ -348,7 +350,6 @@ bool Game::is_valid(vector<int>& positions, const vector<vector<char>>& grid, in
     // Check if the ship fits
     bool ship_fits = true;
 
-    ship_fits = true;
     for (int i = 0; i < ship_length; ++i) {
         int row = position / 10, col = position % 10;
 

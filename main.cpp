@@ -17,7 +17,7 @@ bool restart();
 int main() {
 	try {
         // Set the seed for rand()
-        srand (time(NULL));
+        srand(time(NULL));
         run();
     }
     // catch all exceptions not handled
@@ -33,7 +33,6 @@ int main() {
 void run() {
     while (true) {
         try {
-
             // Reset the game
             game.reset();
             cout << "***************************\nGame Start!" << endl;

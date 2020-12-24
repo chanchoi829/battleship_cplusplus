@@ -2,3 +2,7 @@
 
 # Object files
 *.o
+
+# Compiled files
+*.exe
+*.o
