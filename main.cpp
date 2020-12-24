@@ -11,7 +11,7 @@ using namespace std;
 
 // Run the game
 void run();
-// Restart the battleship game
+// Check if the player wants to restart
 bool restart();
 
 int main() {
@@ -66,7 +66,7 @@ void run() {
     }
 }
 
-// Restart the battleship game
+// Check if the player wants to restart
 bool restart() {
     string command;
     while (true) {

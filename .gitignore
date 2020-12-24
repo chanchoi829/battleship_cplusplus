@@ -5,4 +5,5 @@
 
 # Compiled files
 *.exe
-*.o
+
+battleship

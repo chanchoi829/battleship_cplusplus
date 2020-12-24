@@ -151,8 +151,9 @@ void Game::player_turn() {
             cout << "Computer's Cruiser(length 3): " << (computer_ships[2].first == computer_ships[2].second ? "sunk" : "afloat") << endl;
             cout << "Computer's Battleship(length 4): " << (computer_ships[3].first == computer_ships[3].second ? "sunk" : "afloat") << endl;
             cout << "Computer's Carrier(length 5): " << (computer_ships[4].first == computer_ships[4].second ? "sunk" : "afloat") << endl;
-            cout << "\nExample: G5\nAttack a point: ";
 
+            // Read in a position
+            cout << "\nExample: G5\nAttack a point: ";
             string position;
             read_position(position);
 
@@ -165,6 +166,7 @@ void Game::player_turn() {
             if (computer_grid[row][col] == '.') {
                 cout << "Miss!" << endl;
                 computer_grid[row][col] = 'o';
+
                 return;
             }
 
