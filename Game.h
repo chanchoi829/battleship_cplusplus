@@ -5,7 +5,6 @@ Game class
 #ifndef GAME_H
 #define GAME_H
 
-#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -54,7 +53,7 @@ private:
     // Place player's ship
     void place_player_ship(const std::string& ship);
 
-    // Check the ship's type
+    // Check the ship's type and assign values accordingly
     void check_ship_type(const std::string& ship, int& ship_length, char& ship_letter);
 
     // Check if the given ship can fit
@@ -70,10 +69,13 @@ private:
     // Boards
     std::vector<std::vector<char>> computer_grid, player_grid;
 
-    // How many shots a ship has taken + sunk or not
+    // Number of ships sunk + ship HP
     std::vector<std::pair<int, int>> computer_ships, player_ships;
 
+    // Keeps track of sunk ships. Saved points are for hard mode
     int computer_sunk, player_sunk, row_prev, col_prev;
+
+    // Difficulty
     bool easy;
 };
 

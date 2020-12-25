@@ -75,6 +75,7 @@ bool restart() {
 
             cin >> command;
 
+            // Conver to lower case
             transform(command.begin(), command.end(), command.begin(),
                 [](unsigned char c){ return tolower(c); });
 

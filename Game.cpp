@@ -11,6 +11,7 @@ void Game::reset() {
     row_prev = -1;
     col_prev = -1;
 
+    // Read in difficulty
     string difficulty;
     while (true) {
         try {
@@ -18,6 +19,7 @@ void Game::reset() {
             cin >> difficulty;
             cout << endl;
 
+            // Convert to lower case
             transform(difficulty.begin(), difficulty.end(), difficulty.begin(),
                 [](unsigned char c){ return tolower(c); });
 
@@ -37,9 +39,11 @@ void Game::reset() {
         }
     }
 
+    // Intialize default grids
     computer_grid = vector<vector<char>> (10, vector<char>(10, '.'));
     player_grid = vector<vector<char>> (10, vector<char>(10, '.'));
 
+    // Reset vectors
     computer_ships.clear();
     player_ships.clear();
 
@@ -57,6 +61,7 @@ void Game::reset() {
     place_player_ship("Battleship");
     place_player_ship("Carrier");
 
+    // Default values
     computer_sunk = 0;
     player_sunk = 0;
 }
@@ -74,21 +79,26 @@ void Game::computer_turn() {
         }
         // Hard mode
         else {
+            // Attack a point that is near the saved point
+            // Up
             if (row_prev - 1 >= 0 && player_grid[row_prev - 1][col_prev] != 'o' && player_grid[row_prev - 1][col_prev] != 'x') {
                 row = row_prev - 1;
                 col = col_prev;
                 position = row * 10 + col;
             }
+            // Down
             else if (row_prev + 1 <= 9 && player_grid[row_prev + 1][col_prev] != 'o' && player_grid[row_prev + 1][col_prev] != 'x') {
                 row = row_prev + 1;
                 col = col_prev;
                 position = row * 10 + col;
             }
+            // Left
             else if (col_prev - 1 >= 0 && player_grid[row_prev][col_prev - 1] != 'o' && player_grid[row_prev][col_prev - 1] != 'x') {
                 row = row_prev;
                 col = col_prev - 1;
                 position = row * 10 + col;
             }
+            // Right
             else if (col_prev + 1 >= 0 && player_grid[row_prev][col_prev + 1] != 'o' && player_grid[row_prev][col_prev + 1] != 'x') {
                 row = row_prev;
                 col = col_prev + 1;
@@ -101,13 +111,16 @@ void Game::computer_turn() {
             }
         }
 
+        // Attack a point that has not been attacked
         if (player_grid[row][col] != 'o' && player_grid[row][col] != 'x') {
-            cout << "Computer attacks " << string(1, (position / 10) + 'A') << (position % 10) + 1 << ". "; 
+            cout << "Computer attacks " << string(1, (position / 10) + 'A') << (position % 10) + 1 << ". ";
+            // Miss
             if (player_grid[row][col] == '.') {
                 player_grid[row][col] = 'o';
 
                 cout << "Missed!" << endl;
             }
+            // Hit
             else {
                 int which_ship;
                 string ship;
@@ -115,12 +128,14 @@ void Game::computer_turn() {
 
                 ++player_ships[which_ship].first;
 
+                // Ship has been sunk
                 if (player_ships[which_ship].first == player_ships[which_ship].second) {
                     cout << "Hit! Your " << ship << " has been sunk!" << endl;
                     ++player_sunk;
                     row_prev = -1;
                     col_prev = -1;
                 }
+                // Ship has not been sunk
                 else {
                     cout << "Hit!" << endl;
 
@@ -129,6 +144,7 @@ void Game::computer_turn() {
                     col_prev = col;
                 }
 
+                // Mark the grid
                 player_grid[row][col] = 'x';
             }
             return;
@@ -145,6 +161,7 @@ void Game::player_turn() {
             cout << endl;
             draw_player_grid();
 
+            // Show which computer ships have sunk
             cout << "***************************" << endl;
             cout << "Computer's Destroyer(length 2): " << (computer_ships[0].first == computer_ships[0].second ? "sunk" : "afloat") << endl;
             cout << "Computer's Submarine(length 3): " << (computer_ships[1].first == computer_ships[1].second ? "sunk" : "afloat") << endl;
@@ -160,9 +177,11 @@ void Game::player_turn() {
             // Convert to row and col
             int row = position[0] - 'a', col = position.length() == 3 ? 9 : position[1] - '1';
 
+            // Check if the point has been attacked already
             if (computer_grid[row][col] == 'o' || computer_grid[row][col] == 'x')
                 throw Error("Already attacked this point!\n");
 
+            // Miss
             if (computer_grid[row][col] == '.') {
                 cout << "Miss!" << endl;
                 computer_grid[row][col] = 'o';
@@ -177,6 +196,7 @@ void Game::player_turn() {
 
             convert_char_to_ship(computer_grid[row][col], ship, which_ship);
 
+            // Increment the ship's damage taken
             ++computer_ships[which_ship].first;
 
             // When hp is 0, the ship sinks
@@ -186,6 +206,7 @@ void Game::player_turn() {
                 cout << "Computer's " << ship << " sunk!" << endl;
             }
 
+            // Mark the point
             computer_grid[row][col] = 'x';
             return;
         }
@@ -201,17 +222,19 @@ void Game::player_turn() {
 void Game::draw_computer_grid() {
    cout << "      Enemy Grid\n\n  ";
 
+    // Print numbers
     for (char i = '1'; i <= '9'; ++i)
         cout << i << " ";
 
     cout << "10" << endl;
 
+    // Print letters
     for (char i = 'A'; i <= 'J'; ++i) {
         cout << string(1, i) << " ";
 
-
         for (int j = 0; j < 10; ++j) {
             char tmp = computer_grid[i - 'A'][j];
+            // Do not show ships' locations to the player
             if (tmp != '.' && tmp != 'o' && tmp != 'x')
                 tmp = '.';
             cout << tmp << " ";
@@ -225,16 +248,19 @@ void Game::draw_computer_grid() {
 void Game::draw_player_grid() {
     cout << "      Your Grid\n\n  ";
 
+    // Print numbers
     for (char i = '1'; i <= '9'; ++i)
         cout << i << " ";
 
     cout << "10" << endl;
 
+    // Print letters
     for (char i = 'A'; i <= 'J'; ++i) {
         cout << string(1, i) << " ";
 
         for (int j = 0; j < 10; ++j) {
             char tmp = player_grid[i - 'A'][j];
+            // Don't show computer's missed attacks
             if (tmp == 'o')
                 tmp = '.';
             cout << tmp << " ";
@@ -323,6 +349,7 @@ void Game::place_player_ship(const string& ship) {
     }
 }
 
+// Check the ship's type and assign values accordingly
 void Game::check_ship_type(const string& ship, int& ship_length, char& ship_letter) {
     if (ship == "Destroyer") {
         ship_length = 2;
@@ -346,6 +373,7 @@ void Game::check_ship_type(const string& ship, int& ship_length, char& ship_lett
     }  
 }
 
+// Check if the given ship can fit
 bool Game::is_valid(vector<int>& positions, const vector<vector<char>>& grid, int position, int direction, int ship_length) {
     positions.clear();
 
@@ -373,6 +401,7 @@ bool Game::is_valid(vector<int>& positions, const vector<vector<char>>& grid, in
 void Game::read_position(std::string& position) {
     cin >> position;
 
+    // Convert to lower case
     transform(position.begin(), position.end(), position.begin(),
         [](unsigned char c){ return tolower(c); });
 
