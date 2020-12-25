@@ -23,8 +23,6 @@ public:
     void draw_player_grid();
     // For Singleton
     static Game& get_instance();
-    std::vector<std::vector<char>>& get_player_grid()
-    {return player_grid;}
 
     // Getters
     int get_computer_sunk()
