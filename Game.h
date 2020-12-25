@@ -29,8 +29,6 @@ public:
     {return computer_sunk;}
     int get_player_sunk()
     {return player_sunk;}
-    bool is_easy()
-    {return easy;}
 
     // Disallow copy/move construction or assignment
     Game(Game& obj) = delete;
