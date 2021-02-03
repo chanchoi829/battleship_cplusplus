@@ -121,7 +121,7 @@ void Computer::place_ship(const string& ship) {
 
     // Place the ship
     for (int position : points)
-        engine.get_computer_grid().modify_grid(position / 10, position % 10, ship[0]);
+        engine.get_computer_grid().modify_grid(position / 10, position % 10, new_ship.get_letter());
 
     // Set the ship's hp
     engine.push_computer_ship(new_ship);
