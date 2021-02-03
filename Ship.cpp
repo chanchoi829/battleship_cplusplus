@@ -27,8 +27,10 @@ Ship::Ship(const string& name_) {
     else {
         length = 5;
         hp = 5;
-        letter = 'B';
+        letter = 'C';
     }
+
+    name = name_;
 }
 
 void Ship::inject_damage() {
@@ -36,7 +38,7 @@ void Ship::inject_damage() {
 }
 
 void Ship::get_status() {
-    cout << "Computer's " << name << " (length" << length << "): ";
+    cout << "Computer's " << name << " (length " << length << "): ";
 
     if (hp == 0)
         cout << "sunk" << endl;

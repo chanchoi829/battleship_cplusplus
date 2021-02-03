@@ -28,7 +28,7 @@ void Display::draw_computer_grid() {
             cout << tmp << " ";
         }
 
-        cout << endl << endl;
+        cout << endl;
     }
 }
 
@@ -54,6 +54,6 @@ void Display::draw_player_grid() {
             cout << tmp << " ";
         }
 
-        cout << endl << endl;
+        cout << endl;
     }
 }

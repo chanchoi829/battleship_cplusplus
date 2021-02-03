@@ -10,7 +10,6 @@
 using namespace std;
 
 Engine::Engine() {
-    reset();
 }
 
 // Run the game
@@ -18,7 +17,7 @@ void Engine::run() {
     while (true) {
         try {
             // Reset the game
-            engine;
+            reset();
             cout << "***************************\nGame Start!" << endl;
 
             while (true) {
@@ -41,8 +40,6 @@ void Engine::run() {
                 cout << "Done" << endl;
                 return;
             }
-
-            engine.reset();
         }
         // If an Error is thrown, skip rest of the line.
         catch (Error& e) {
@@ -51,8 +48,6 @@ void Engine::run() {
         }
     }
 }
-
-
 
 // Reset grids
 void Engine::reset() {

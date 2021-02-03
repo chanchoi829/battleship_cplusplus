@@ -86,7 +86,7 @@ void Computer::turn() {
                 engine.get_player_ships()[which_ship].inject_damage();
 
                 // Ship has been sunk
-                if (engine.get_player_ships()[which_ship].get_hp()) {
+                if (engine.get_player_ships()[which_ship].get_hp() == 0) {
                     cout << "Hit! Your " << ship << " has been sunk!" << endl;
                     engine.get_player().sink_ship();
                     row_prev = -1;

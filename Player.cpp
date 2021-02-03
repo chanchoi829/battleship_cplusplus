@@ -84,7 +84,8 @@ void Player::place_ship(const string& ship) {
     Ship new_ship(ship);
     while (true) {
         try {
-            //draw_player_grid();
+            Display d;
+            d.draw_player_grid();
             cout << "\nExample: G5\nPlace your " << ship << "(length " << new_ship.get_hp() << "): ";
 
             string point;
