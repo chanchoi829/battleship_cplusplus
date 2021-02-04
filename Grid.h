@@ -7,8 +7,6 @@ class Grid {
 
 public:
     Grid();
-    // Reset the grid
-    void clear();
 
     void modify_grid(int row, int col, char c);
 

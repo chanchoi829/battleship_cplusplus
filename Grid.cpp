@@ -15,8 +15,3 @@ void Grid::modify_grid(int row, int col, char c) {
     lock_guard<mutex> lock(engine.get_args()->m);
     grid[row][col] = c;
 }
-
-// Reset the grid
-void Grid::clear() {
-    grid = vector<vector<char>>(10, vector<char>(10, '.'));
-}
