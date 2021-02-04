@@ -11,11 +11,13 @@ using namespace std;
 
 void Display::draw(Arguments* args) {
     while (true) {
-        unique_lock<mutex> lock_d(args->m);
-        draw_computer_grid();
-        draw_player_grid();
-        lock_d.unlock();
-        this_thread::sleep_for(chrono::seconds(7));
+        {
+            unique_lock<mutex> lock_d(args->m);
+            draw_computer_grid();
+            draw_player_grid();
+            lock_d.unlock();
+        }
+        this_thread::sleep_for(chrono::milliseconds(30));
     }
 }
 
