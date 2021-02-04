@@ -12,7 +12,7 @@ Engine class
 #include <string>
 #include <utility>
 #include <vector>
-#include <pthread.h>
+#include <thread>
 
 struct Arguments;
 
@@ -41,10 +41,6 @@ public:
     {return computer;}
     Player& get_player()
     {return player;}
-    pthread_t& get_c_thread()
-    {return c_display;}
-    pthread_t& get_p_thread()
-    {return p_display;}
     Arguments* get_args()
     {return args;}
 
@@ -67,7 +63,7 @@ private:
     Player player;
 
     Arguments* args;
-    pthread_t c_display, p_display;
+    std::thread display;
 
     std::vector<Ship> computer_ships, player_ships;
 };

@@ -6,26 +6,21 @@
 #include "Utility.h"
 #include <algorithm>
 #include <iostream>
-#include <pthread.h>
 
 using namespace std;
 
-typedef void* (*THREADFUNCPTR)(void*);
-
 Engine::Engine() {
+    args = new Arguments;
+    display = thread(Display::draw, args);
 }
 
 // Run the game
 void Engine::run() {
-    args = new Arguments;
-    void* converted = args;
-    pthread_create(&c_display, NULL, (THREADFUNCPTR) &Display::draw_computer_grid, converted);
-
-    pthread_create(&p_display, NULL, (THREADFUNCPTR)&Display::draw_player_grid, converted);
     while (true) {
         try {
             // Reset the game
             reset();
+
             cout << "***************************\nGame Start!" << endl;
 
             while (true) {

@@ -5,7 +5,6 @@
 #include "Utility.h"
 #include <algorithm>
 #include <iostream>
-#include <pthread.h>
 
 using namespace std;
 
@@ -19,22 +18,6 @@ Player::Player() {
 void Player::turn() {
     while (true) {
         try {
-            // Print computer's grid
-            engine.get_args()->print_computer = true;
-            pthread_cond_signal(&engine.get_args()->cv_c);
-
-            // Wait until computer's grid is printed
-            while (engine.get_args()->print_computer)
-                pthread_cond_wait(&engine.get_args()->cv_m, &engine.get_args()->m);
-
-            // Print player's grid
-            engine.get_args()->print_player = true;
-            pthread_cond_signal(&engine.get_args()->cv_p);
-
-            // Wait until player's grid is printed
-            while (engine.get_args()->print_player)
-                pthread_cond_wait(&engine.get_args()->cv_m, &engine.get_args()->m);
-
             // Show which computer ships have sunk
             cout << "***************************" << endl;
             engine.get_computer_ships()[0].get_status();
@@ -58,7 +41,7 @@ void Player::turn() {
             // Miss
             if (computer_grid[row][col] == '.') {
                 cout << "Miss!" << endl;
-                computer_grid[row][col] = 'o';
+                engine.get_computer_grid().modify_grid(row, col, 'o');
 
                 return;
             }
@@ -80,7 +63,7 @@ void Player::turn() {
             }
 
             // Mark the point
-            computer_grid[row][col] = 'x';
+            engine.get_computer_grid().modify_grid(row, col, 'x');
             return;
         }
         // If an Error is thrown, skip rest of the line.
@@ -95,14 +78,6 @@ void Player::place_ship(const string& ship) {
     Ship new_ship(ship);
     while (true) {
         try {
-            // Print player's grid
-            engine.get_args()->print_player = true;
-            pthread_cond_signal(&engine.get_args()->cv_p);
-
-            // Wait until player's grid is printed
-            while (engine.get_args()->print_player)
-                pthread_cond_wait(&engine.get_args()->cv_m, &engine.get_args()->m);
-
             cout << "\nExample: G5\nPlace your " << ship << "(length " << new_ship.get_hp() << "): ";
 
             string point;

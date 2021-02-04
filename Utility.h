@@ -1,13 +1,12 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
+#include <condition_variable>
 #include <exception>
+#include <mutex>
 #include <string>
+#include <thread>
 #include <vector>
-
-#define HAVE_STRUCT_TIMESPEC
-
-#include <pthread.h>
 
 #define engine Engine::get_instance()
 
@@ -22,8 +21,8 @@ private:
 };
 
 struct Arguments {
-    pthread_mutex_t m;
-    pthread_cond_t cv_c, cv_p, cv_m;
+    std::mutex m;
+    std::condition_variable cv_c, cv_p, cv_m;
     bool print_computer = false, print_player = false;
 };
 

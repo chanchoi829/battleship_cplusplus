@@ -73,7 +73,7 @@ void Computer::turn() {
             cout << "Computer attacks " << string(1, (point / 10) + 'A') << (point % 10) + 1 << ". ";
             // Miss
             if (player_grid[row][col] == '.') {
-                player_grid[row][col] = 'o';
+                engine.get_player_grid().modify_grid(row, col, 'o');
 
                 cout << "Missed!" << endl;
             }
@@ -102,7 +102,7 @@ void Computer::turn() {
                 }
 
                 // Mark the grid
-                player_grid[row][col] = 'x';
+                engine.get_player_grid().modify_grid(row, col, 'x');
             }
             return;
         }
