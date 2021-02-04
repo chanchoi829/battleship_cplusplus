@@ -20,10 +20,10 @@ void Player::turn() {
     while (true) {
         try {
             engine.get_args()->print_computer = true;
-            pthread_cond_signal(&engine.get_args()->cv);
+            pthread_cond_signal(&engine.get_args()->cv_c);
 
             engine.get_args()->print_player = true;
-            pthread_cond_signal(&engine.get_args()->cv);
+            pthread_cond_signal(&engine.get_args()->cv_p);
 
             // Show which computer ships have sunk
             cout << "***************************" << endl;
@@ -86,7 +86,8 @@ void Player::place_ship(const string& ship) {
     while (true) {
         try {
             engine.get_args()->print_player = true;
-            pthread_cond_signal(&engine.get_args()->cv);
+            pthread_cond_signal(&engine.get_args()->cv_p);
+
             cout << "\nExample: G5\nPlace your " << ship << "(length " << new_ship.get_hp() << "): ";
 
             string point;

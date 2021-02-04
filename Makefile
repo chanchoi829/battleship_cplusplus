@@ -10,7 +10,7 @@ PROG = battleship
 default: $(PROG)
 
 $(PROG): $(OBJS)
-	$(LD) $(LFLAGS) $(OBJS) -pthread -o $(PROG)
+	$(LD) $(LFLAGS) $(OBJS) -pthread -g -o $(PROG)
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) main.cpp

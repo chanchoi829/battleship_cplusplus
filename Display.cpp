@@ -16,8 +16,9 @@ void* Display::draw_computer_grid(void* args) {
         // Wait until signaled
         p->print_computer = false;
         while (!p->print_computer)
-            pthread_cond_wait(&p->cv, &p->m);
+            pthread_cond_wait(&p->cv_c, &p->m);
 
+        cout << endl;
         cout << "      Enemy Grid\n\n  ";
 
         // Print numbers
@@ -56,8 +57,9 @@ void* Display::draw_player_grid(void* args) {
         // Wait until signaled
         p->print_player = false;
         while (!p->print_player)
-            pthread_cond_wait(&p->cv, &p->m);
+            pthread_cond_wait(&p->cv_p, &p->m);
 
+        cout << endl;
         cout << "      Your Grid\n\n  ";
 
         // Print numbers
