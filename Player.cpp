@@ -5,6 +5,7 @@
 #include "Utility.h"
 #include <algorithm>
 #include <iostream>
+#include <pthread.h>
 
 using namespace std;
 
@@ -18,11 +19,11 @@ Player::Player() {
 void Player::turn() {
     while (true) {
         try {
-            // Draw grids
-            Display d;
-            d.draw_computer_grid();
-            cout << endl;
-            d.draw_player_grid();
+            engine.get_args()->print_computer = true;
+            pthread_cond_signal(&engine.get_args()->cv);
+
+            engine.get_args()->print_player = true;
+            pthread_cond_signal(&engine.get_args()->cv);
 
             // Show which computer ships have sunk
             cout << "***************************" << endl;
@@ -84,8 +85,8 @@ void Player::place_ship(const string& ship) {
     Ship new_ship(ship);
     while (true) {
         try {
-            Display d;
-            d.draw_player_grid();
+            engine.get_args()->print_player = true;
+            pthread_cond_signal(&engine.get_args()->cv);
             cout << "\nExample: G5\nPlace your " << ship << "(length " << new_ship.get_hp() << "): ";
 
             string point;

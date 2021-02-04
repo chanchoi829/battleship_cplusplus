@@ -1,19 +1,27 @@
 #include "Computer.h"
+#include "Display.h"
 #include "Engine.h"
 #include "Grid.h"
 #include "Player.h"
 #include "Utility.h"
 #include <algorithm>
 #include <iostream>
-#include <stdlib.h>
+#include <pthread.h>
 
 using namespace std;
+
+typedef void* (*THREADFUNCPTR)(void*);
 
 Engine::Engine() {
 }
 
 // Run the game
 void Engine::run() {
+    args = new Arguments;
+    void* converted = args;
+    pthread_create(&c_display, NULL, (THREADFUNCPTR) &Display::draw_computer_grid, converted);
+
+    pthread_create(&p_display, NULL, (THREADFUNCPTR)&Display::draw_player_grid, converted);
     while (true) {
         try {
             // Reset the game
@@ -38,6 +46,7 @@ void Engine::run() {
 
             if (!restart()) {
                 cout << "Done" << endl;
+                delete args;
                 return;
             }
         }

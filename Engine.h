@@ -12,10 +12,9 @@ Engine class
 #include <string>
 #include <utility>
 #include <vector>
+#include <pthread.h>
 
-class Grid;
-class Computer;
-class Player;
+struct Arguments;
 
 class Engine {
 
@@ -42,6 +41,12 @@ public:
     {return computer;}
     Player& get_player()
     {return player;}
+    pthread_t& get_c_thread()
+    {return c_display;}
+    pthread_t& get_p_thread()
+    {return p_display;}
+    Arguments* get_args()
+    {return args;}
 
     // Disallow copy/move construction or assignment
     Engine(Engine& obj) = delete;
@@ -60,6 +65,9 @@ private:
     Grid computer_grid, player_grid;
     Computer computer;
     Player player;
+
+    Arguments* args;
+    pthread_t c_display, p_display;
 
     std::vector<Ship> computer_ships, player_ships;
 };

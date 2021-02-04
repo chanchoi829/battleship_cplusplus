@@ -1,8 +1,8 @@
 #include "Engine.h"
 #include "Utility.h"
-#include <iostream>
-#include <exception>
 #include <ctime>
+#include <exception>
+#include <iostream>
 
 using namespace std;
 

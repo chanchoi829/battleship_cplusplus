@@ -5,6 +5,10 @@
 #include <string>
 #include <vector>
 
+#define HAVE_STRUCT_TIMESPEC
+
+#include <pthread.h>
+
 #define engine Engine::get_instance()
 
 // Error class
@@ -15,6 +19,12 @@ public:
         {return msg;}
 private:
     const char* msg;
+};
+
+struct Arguments {
+    pthread_mutex_t m;
+    pthread_cond_t cv;
+    bool print_computer = false, print_player = false;
 };
 
 // Check if the given ship can fit
