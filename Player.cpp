@@ -19,11 +19,21 @@ Player::Player() {
 void Player::turn() {
     while (true) {
         try {
+            // Print computer's grid
             engine.get_args()->print_computer = true;
             pthread_cond_signal(&engine.get_args()->cv_c);
 
+            // Wait until computer's grid is printed
+            while (engine.get_args()->print_computer)
+                pthread_cond_wait(&engine.get_args()->cv_m, &engine.get_args()->m);
+
+            // Print player's grid
             engine.get_args()->print_player = true;
             pthread_cond_signal(&engine.get_args()->cv_p);
+
+            // Wait until player's grid is printed
+            while (engine.get_args()->print_computer)
+                pthread_cond_wait(&engine.get_args()->cv_m, &engine.get_args()->m);
 
             // Show which computer ships have sunk
             cout << "***************************" << endl;
@@ -85,8 +95,13 @@ void Player::place_ship(const string& ship) {
     Ship new_ship(ship);
     while (true) {
         try {
+            // Print player's grid
             engine.get_args()->print_player = true;
             pthread_cond_signal(&engine.get_args()->cv_p);
+
+            // Wait until player's grid is printed
+            while (engine.get_args()->print_player)
+                pthread_cond_wait(&engine.get_args()->cv_m, &engine.get_args()->m);
 
             cout << "\nExample: G5\nPlace your " << ship << "(length " << new_ship.get_hp() << "): ";
 

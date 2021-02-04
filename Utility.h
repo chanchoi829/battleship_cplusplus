@@ -23,7 +23,7 @@ private:
 
 struct Arguments {
     pthread_mutex_t m;
-    pthread_cond_t cv_c, cv_p;
+    pthread_cond_t cv_c, cv_p, cv_m;
     bool print_computer = false, print_player = false;
 };
 
