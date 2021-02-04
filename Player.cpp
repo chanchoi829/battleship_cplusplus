@@ -32,7 +32,7 @@ void Player::turn() {
             pthread_cond_signal(&engine.get_args()->cv_p);
 
             // Wait until player's grid is printed
-            while (engine.get_args()->print_computer)
+            while (engine.get_args()->print_player)
                 pthread_cond_wait(&engine.get_args()->cv_m, &engine.get_args()->m);
 
             // Show which computer ships have sunk
