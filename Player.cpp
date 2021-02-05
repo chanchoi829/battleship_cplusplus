@@ -28,7 +28,7 @@ void Player::turn() {
 
             // Check if the point has been attacked already
             if (computer_grid[row][col] == 'o' || computer_grid[row][col] == 'x')
-                throw Error("Already attacked this point!\n");
+                continue;
 
             // Miss
             if (computer_grid[row][col] == '.') {

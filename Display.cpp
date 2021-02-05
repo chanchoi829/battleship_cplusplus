@@ -21,11 +21,11 @@ void Display::draw(Arguments* args) {
 
             // Show which computer ships have sunk
             wprintw(stdscr, "\n");
-            /*engine.get_computer_ships()[0].get_status();
+            engine.get_computer_ships()[0].get_status();
             engine.get_computer_ships()[1].get_status();
             engine.get_computer_ships()[2].get_status();
             engine.get_computer_ships()[3].get_status();
-            engine.get_computer_ships()[4].get_status();*/
+            engine.get_computer_ships()[4].get_status();
 
             wrefresh(stdscr);
             lock_d.unlock();

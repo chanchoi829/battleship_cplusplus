@@ -108,6 +108,7 @@ void Engine::reset() {
 }
 
 void Engine::push_computer_ship(Ship ship) {
+    lock_guard<mutex>(args->m);
     computer_ships.push_back(ship);
 }
 
