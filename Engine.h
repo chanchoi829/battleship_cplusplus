@@ -55,9 +55,6 @@ private:
     Engine();
     ~Engine(){}
 
-    // Helper functions
-    bool restart();
-
     Grid computer_grid, player_grid;
     Computer computer;
     Player player;

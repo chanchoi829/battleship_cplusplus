@@ -16,80 +16,32 @@ Engine::Engine() {
 
 // Run the game
 void Engine::run() {
+    // Reset the game
+    reset();
+
     while (true) {
-        try {
-            // Reset the game
-            reset();
+        // Player's turn
+        player.turn();
+        if (player.get_ships_alive() == 0)
+            break;
 
-            while (true) {
-                // Player's turn
-                player.turn();
-                if (player.get_ships_alive() == 0) {
-                    //cout << "You Win!" << endl;
-                    break;
-                }
-
-                // Computer's turn
-                computer.turn();
-                if (computer.get_ships_alive() == 0) {
-                    //cout << "You lose!" << endl;
-                    break;
-                }
-            }
-
-            delete args;
-            return;
-
-            /*if (!restart()) {
-                cout << "Done" << endl;
-                delete args;
-                return;
-            }*/
-        }
-        // If an Error is thrown, skip rest of the line.
-        catch (Error& e) {
-            //cout << e.what() << endl;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
+        // Computer's turn
+        computer.turn();
+        if (computer.get_ships_alive() == 0)
+            break;
     }
+
+    delete args;
+    return;
 }
 
 // Reset grids
 void Engine::reset() {
-    // Read in difficulty
-    bool easy = false;
-    /*string difficulty;
-    while (true) {
-        try {
-            cout << "Example: hard\nChoose difficulty easy/hard: ";
-            cin >> difficulty;
-            cout << endl;
-
-            // Convert to lower case
-            transform(difficulty.begin(), difficulty.end(), difficulty.begin(),
-                [](unsigned char c){ return tolower(c); });
-
-            if (difficulty == "easy")
-                easy = true;
-            else if (difficulty == "hard")
-                easy = false;
-            else
-                throw Error("Enter a valid difficulty!\n");
-
-            break;
-        }
-        // If an Error is thrown, skip rest of the line.
-        catch (Error& e) {
-            cout << e.what() << endl;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-    }*/
-
     // Intialize default grids
     computer_grid = Grid();
     player_grid = Grid();
 
-    computer = Computer(easy);
+    computer = Computer(false);
     player = Player();
 
     // Create computer's grid
@@ -114,34 +66,6 @@ void Engine::push_computer_ship(Ship ship) {
 
 void Engine::push_player_ship(Ship ship) {
     player_ships.push_back(ship);
-}
-
-// Check if the player wants to restart
-bool Engine::restart() {
-    string command;
-    while (true) {
-        try {
-            //cout << "Restart?\nType yes or no" << endl;
-
-            cin >> command;
-
-            // Conver to lower case
-            transform(command.begin(), command.end(), command.begin(),
-                [](unsigned char c) { return tolower(c); });
-
-            if (command == "yes")
-                return true;
-            else if (command == "no")
-                return false;
-            else
-                throw Error("Invalid answer!\n");
-        }
-        // If an Error is thrown, skip rest of the line.
-        catch (Error& e) {
-            //cout << e.what() << endl;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-    }
 }
 
 // For Singleton

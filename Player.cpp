@@ -17,105 +17,38 @@ Player::Player() {
 // Simulate player's turn
 void Player::turn() {
     while (true) {
-        try {
-            // Read in a point
-            // cout << "\nExample: G5\nAttack a point: ";
-            string point;
-            read_point(point);
+        // Read in a point
+        string point;
+        read_point(point);
 
-            // Convert to row and col
-            int row = point[0] - 'a', col = point.length() == 3 ? 9 : point[1] - '1';
+        // Convert to row and col
+        int row = point[0] - 'a', col = point.length() == 3 ? 9 : point[1] - '1';
 
-            // Check if the point has been attacked already
-            if (computer_grid[row][col] == 'o' || computer_grid[row][col] == 'x')
-                continue;
+        // Check if the point has been attacked already
+        if (computer_grid[row][col] == 'o' || computer_grid[row][col] == 'x')
+            continue;
 
-            // Miss
-            if (computer_grid[row][col] == '.') {
-                //cout << "Miss!" << endl;
-                engine.get_computer_grid().modify_grid(row, col, 'o');
-
-                return;
-            }
-
-            //cout << "Hit!" << endl;
-
-            int which_ship;
-            string ship;
-
-            convert_char_to_ship(computer_grid[row][col], ship, which_ship);
-
-            // Increment the ship's damage taken
-            engine.get_computer_ships()[which_ship].inject_damage();
-
-            // When hp is 0, the ship sinks
-            if (engine.get_computer_ships()[which_ship].get_hp() == 0) {
-                engine.get_computer().sink_ship();
-                //cout << "Computer's " << ship << " sunk!" << endl;
-            }
-
-            // Mark the point
-            engine.get_computer_grid().modify_grid(row, col, 'x');
+        // Miss
+        if (computer_grid[row][col] == '.') {
+            engine.get_computer_grid().modify_grid(row, col, 'o');
             return;
         }
-        // If an Error is thrown, skip rest of the line.
-        catch (Error& e) {
-            cout << e.what() << endl;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
-    }
-}
 
-void Player::place_ship(const string& ship) {
-    Ship new_ship(ship);
-    while (true) {
-        try {
-            cout << "\nExample: G5\nPlace your " << ship << "(length " << new_ship.get_hp() << "): ";
+        int which_ship;
+        string ship;
 
-            string point;
-            read_point(point);
+        convert_char_to_ship(computer_grid[row][col], ship, which_ship);
 
-            cout << "\nExample: right\nEnter the direction(left/right/up/down): ";
-            string direction;
-            cin >> direction;
+        // Increment the ship's damage taken
+        engine.get_computer_ships()[which_ship].inject_damage();
 
-            transform(direction.begin(), direction.end(), direction.begin(),
-                [](unsigned char c) { return tolower(c); });
+        // When hp is 0, the ship sinks
+        if (engine.get_computer_ships()[which_ship].get_hp() == 0)
+            engine.get_computer().sink_ship();
 
-            int direction_converted;
-
-            // Convert direction to number
-            if (direction == "left")
-                direction_converted = -1;
-            else if (direction == "up")
-                direction_converted = -10;
-            else if (direction == "right")
-                direction_converted = 1;
-            else if (direction == "down")
-                direction_converted = 10;
-            else
-                throw Error("Enter a valid direction!\n");
-
-            vector<int> points;
-
-            // Convert point to a number (0 ~ 99)
-            int position_converted = (point[0] - 'a') * 10 + (point.length() == 2 ? point[1] - '1' : 9);
-
-            if (!is_valid(engine.get_player_grid().get_grid(), points, position_converted, direction_converted, new_ship.get_hp()))
-                throw Error("Ship does not fit!\n");
-
-            // Place the ship
-            for (int pos : points)
-                engine.get_player_grid().modify_grid(pos / 10, pos % 10, new_ship.get_letter());
-
-            engine.push_player_ship(new_ship);
-            break;
-        }
-        // If an Error is thrown, skip rest of the line.
-        catch (Error& e) {
-            cout << e.what() << endl;
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        }
+        // Mark the point
+        engine.get_computer_grid().modify_grid(row, col, 'x');
+        return;
     }
 }
 

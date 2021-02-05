@@ -70,13 +70,9 @@ void Computer::turn() {
 
         // Attack a point that has not been attacked
         if (player_grid[row][col] != 'o' && player_grid[row][col] != 'x') {
-            //cout << "Computer attacks " << string(1, (point / 10) + 'A') << (point % 10) + 1 << ". ";
             // Miss
-            if (player_grid[row][col] == '.') {
+            if (player_grid[row][col] == '.')
                 engine.get_player_grid().modify_grid(row, col, 'o');
-
-                //cout << "Missed!" << endl;
-            }
             // Hit
             else {
                 int which_ship;
@@ -87,15 +83,12 @@ void Computer::turn() {
 
                 // Ship has been sunk
                 if (engine.get_player_ships()[which_ship].get_hp() == 0) {
-                    //cout << "Hit! Your " << ship << " has been sunk!" << endl;
                     engine.get_player().sink_ship();
                     row_prev = -1;
                     col_prev = -1;
                 }
                 // Ship has not been sunk
                 else {
-                    //cout << "Hit!" << endl;
-
                     // Save the point for the hard mode
                     row_prev = row;
                     col_prev = col;
