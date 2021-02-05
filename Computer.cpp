@@ -11,14 +11,6 @@ using namespace std;
 
 Computer::Computer() {
     ships_alive = 5;
-    easy = false;
-    row_prev = -1;
-    col_prev = -1;
-}
-
-Computer::Computer(bool easy_) {
-    ships_alive = 5;
-    easy = easy_;
     row_prev = -1;
     col_prev = -1;
 }
@@ -28,44 +20,35 @@ void Computer::turn() {
     while (true) {
         int row, col, point;
 
-        // Easy mode
-        if (easy || row_prev == -1) {
+        // Attack a point that is near the saved point
+            // Up
+        if (row_prev - 1 >= 0 && player_grid[row_prev - 1][col_prev] != 'o' && player_grid[row_prev - 1][col_prev] != 'x') {
+            row = row_prev - 1;
+            col = col_prev;
+            point = row * 10 + col;
+        }
+        // Down
+        else if (row_prev + 1 <= 9 && player_grid[row_prev + 1][col_prev] != 'o' && player_grid[row_prev + 1][col_prev] != 'x') {
+            row = row_prev + 1;
+            col = col_prev;
+            point = row * 10 + col;
+        }
+        // Left
+        else if (col_prev - 1 >= 0 && player_grid[row_prev][col_prev - 1] != 'o' && player_grid[row_prev][col_prev - 1] != 'x') {
+            row = row_prev;
+            col = col_prev - 1;
+            point = row * 10 + col;
+        }
+        // Right
+        else if (col_prev + 1 >= 0 && player_grid[row_prev][col_prev + 1] != 'o' && player_grid[row_prev][col_prev + 1] != 'x') {
+            row = row_prev;
+            col = col_prev + 1;
+            point = row * 10 + col;
+        }
+        else {
             point = rand() % 100;
             row = point / 10;
             col = point % 10;
-        }
-        // Hard mode
-        else {
-            // Attack a point that is near the saved point
-            // Up
-            if (row_prev - 1 >= 0 && player_grid[row_prev - 1][col_prev] != 'o' && player_grid[row_prev - 1][col_prev] != 'x') {
-                row = row_prev - 1;
-                col = col_prev;
-                point = row * 10 + col;
-            }
-            // Down
-            else if (row_prev + 1 <= 9 && player_grid[row_prev + 1][col_prev] != 'o' && player_grid[row_prev + 1][col_prev] != 'x') {
-                row = row_prev + 1;
-                col = col_prev;
-                point = row * 10 + col;
-            }
-            // Left
-            else if (col_prev - 1 >= 0 && player_grid[row_prev][col_prev - 1] != 'o' && player_grid[row_prev][col_prev - 1] != 'x') {
-                row = row_prev;
-                col = col_prev - 1;
-                point = row * 10 + col;
-            }
-            // Right
-            else if (col_prev + 1 >= 0 && player_grid[row_prev][col_prev + 1] != 'o' && player_grid[row_prev][col_prev + 1] != 'x') {
-                row = row_prev;
-                col = col_prev + 1;
-                point = row * 10 + col;
-            }
-            else {
-                point = rand() % 100;
-                row = point / 10;
-                col = point % 10;
-            }
         }
 
         // Attack a point that has not been attacked

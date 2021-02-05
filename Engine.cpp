@@ -41,7 +41,7 @@ void Engine::reset() {
     computer_grid = Grid();
     player_grid = Grid();
 
-    computer = Computer(false);
+    computer = Computer();
     player = Player();
 
     // Create computer's grid
