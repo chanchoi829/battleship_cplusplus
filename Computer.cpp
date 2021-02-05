@@ -106,27 +106,3 @@ void Computer::place_ship(const string& ship) {
 void Computer::sink_ship() {
     --ships_alive;
 }
-
-// Convert a char to a ship name
-void Computer::convert_char_to_ship(char ship_char, string& ship, int& which_ship) {
-    if (ship_char == 'd') {
-        which_ship = 0;
-        ship = "Destroyer";
-    }
-    else if (ship_char == 's') {
-        which_ship = 1;
-        ship = "Submarine";
-    }
-    else if (ship_char == 'c') {
-        which_ship = 2;
-        ship = "Cruiser";
-    }
-    else if (ship_char == 'b') {
-        which_ship = 3;
-        ship = "Battleship";
-    }
-    else {
-        which_ship = 4;
-        ship = "Carrier";
-    }
-}
