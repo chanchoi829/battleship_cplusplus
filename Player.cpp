@@ -18,16 +18,8 @@ Player::Player() {
 void Player::turn() {
     while (true) {
         try {
-            // Show which computer ships have sunk
-            cout << "***************************" << endl;
-            engine.get_computer_ships()[0].get_status();
-            engine.get_computer_ships()[1].get_status();
-            engine.get_computer_ships()[2].get_status();
-            engine.get_computer_ships()[3].get_status();
-            engine.get_computer_ships()[4].get_status();
-
             // Read in a point
-            cout << "\nExample: G5\nAttack a point: ";
+            // cout << "\nExample: G5\nAttack a point: ";
             string point;
             read_point(point);
 
@@ -40,13 +32,13 @@ void Player::turn() {
 
             // Miss
             if (computer_grid[row][col] == '.') {
-                cout << "Miss!" << endl;
+                //cout << "Miss!" << endl;
                 engine.get_computer_grid().modify_grid(row, col, 'o');
 
                 return;
             }
 
-            cout << "Hit!" << endl;
+            //cout << "Hit!" << endl;
 
             int which_ship;
             string ship;
@@ -59,7 +51,7 @@ void Player::turn() {
             // When hp is 0, the ship sinks
             if (engine.get_computer_ships()[which_ship].get_hp() == 0) {
                 engine.get_computer().sink_ship();
-                cout << "Computer's " << ship << " sunk!" << endl;
+                //cout << "Computer's " << ship << " sunk!" << endl;
             }
 
             // Mark the point
@@ -127,25 +119,47 @@ void Player::place_ship(const string& ship) {
     }
 }
 
+
+void Player::place_ship_random(const std::string& ship) {
+    Ship new_ship(ship);
+
+    // Direction: left, up, right, down
+    vector<int> points, directions = { -1, -10, 1, 10 };;
+
+    // Generate random positions until the ship fits
+    while (!is_valid(engine.get_player_grid().get_grid(), points, rand() % 100, directions[rand() % 4], new_ship.get_hp())) {}
+
+    // Place the ship
+    for (int position : points)
+        engine.get_player_grid().modify_grid(position / 10, position % 10, new_ship.get_letter());
+
+    // Set the ship's hp
+    engine.push_player_ship(new_ship);
+}
+
 void Player::sink_ship() {
     --ships_alive;
 }
 
 // Get user's input and check if it is valid
 void Player::read_point(std::string& point) {
-    cin >> point;
+    while (true) {
+        cin >> point;
 
-    // Convert to lower case
-    transform(point.begin(), point.end(), point.begin(),
-        [](unsigned char c) { return tolower(c); });
+        // Convert to lower case
+        transform(point.begin(), point.end(), point.begin(),
+            [](unsigned char c) { return tolower(c); });
 
-    // Check the input
-    if ((point.length() != 2 && point.length() != 3) || (point[0] < 'a' || point[0] > 'j'))
-        throw Error("Enter a valid answer!\n");
+        // Check the input
+        if ((point.length() != 2 && point.length() != 3) || (point[0] < 'a' || point[0] > 'j'))
+            continue;
 
-    if (point.length() == 2 && (point[1] < '1' || point[1] > '9'))
-        throw Error("Enter a valid answer!\n");
+        if (point.length() == 2 && (point[1] < '1' || point[1] > '9'))
+            continue;
 
-    if (point.length() == 3 && (point[1] != '1' || point[2] != '0'))
-        throw Error("Enter a valid answer!\n");
+        if (point.length() == 3 && (point[1] != '1' || point[2] != '0'))
+            continue;
+
+        break;
+    }
 }

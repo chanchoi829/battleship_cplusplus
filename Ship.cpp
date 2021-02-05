@@ -1,5 +1,6 @@
 #include "Ship.h"
 #include <iostream>
+#include <ncurses.h>
 
 using namespace std;
 
@@ -38,10 +39,10 @@ void Ship::inject_damage() {
 }
 
 void Ship::get_status() {
-    cout << "Computer's " << name << " (length " << length << "): ";
+    wprintw(stdscr, "Computer's %s (length %d):");
 
     if (hp == 0)
-        cout << "sunk" << endl;
+        wprintw(stdscr, " sunk\n");
     else
-        cout << "afloat" << endl;
+        wprintw(stdscr, " afloat\n");
 }

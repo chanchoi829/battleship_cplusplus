@@ -10,6 +10,8 @@ public:
     // Place player's ship
     void place_ship(const std::string& ship);
 
+    void place_ship_random(const std::string& ship);
+
     void sink_ship();
 
     // Get user's input and check if it is valid

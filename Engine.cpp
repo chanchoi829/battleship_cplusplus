@@ -21,33 +21,34 @@ void Engine::run() {
             // Reset the game
             reset();
 
-            cout << "***************************\nGame Start!" << endl;
-
             while (true) {
                 // Player's turn
                 player.turn();
                 if (player.get_ships_alive() == 0) {
-                    cout << "You Win!" << endl;
+                    //cout << "You Win!" << endl;
                     break;
                 }
 
                 // Computer's turn
                 computer.turn();
                 if (computer.get_ships_alive() == 0) {
-                    cout << "You lose!" << endl;
+                    //cout << "You lose!" << endl;
                     break;
                 }
             }
 
-            if (!restart()) {
+            delete args;
+            return;
+
+            /*if (!restart()) {
                 cout << "Done" << endl;
                 delete args;
                 return;
-            }
+            }*/
         }
         // If an Error is thrown, skip rest of the line.
         catch (Error& e) {
-            cout << e.what() << endl;
+            //cout << e.what() << endl;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     }
@@ -57,7 +58,7 @@ void Engine::run() {
 void Engine::reset() {
     // Read in difficulty
     bool easy = false;
-    string difficulty;
+    /*string difficulty;
     while (true) {
         try {
             cout << "Example: hard\nChoose difficulty easy/hard: ";
@@ -82,7 +83,7 @@ void Engine::reset() {
             cout << e.what() << endl;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
-    }
+    }*/
 
     // Intialize default grids
     computer_grid = Grid();
@@ -92,11 +93,11 @@ void Engine::reset() {
     player = Player();
 
     // Create computer's grid
-    player.place_ship("Destroyer");
-    player.place_ship("Submarine");
-    player.place_ship("Cruiser");
-    player.place_ship("Battleship");
-    player.place_ship("Carrier");
+    player.place_ship_random("Destroyer");
+    player.place_ship_random("Submarine");
+    player.place_ship_random("Cruiser");
+    player.place_ship_random("Battleship");
+    player.place_ship_random("Carrier");
 
     // Create player's grid
     computer.place_ship("Destroyer");
@@ -119,7 +120,7 @@ bool Engine::restart() {
     string command;
     while (true) {
         try {
-            cout << "Restart?\nType yes or no" << endl;
+            //cout << "Restart?\nType yes or no" << endl;
 
             cin >> command;
 
@@ -136,7 +137,7 @@ bool Engine::restart() {
         }
         // If an Error is thrown, skip rest of the line.
         catch (Error& e) {
-            cout << e.what() << endl;
+            //cout << e.what() << endl;
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     }
