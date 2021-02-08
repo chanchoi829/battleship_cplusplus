@@ -10,6 +10,7 @@
 
 struct Arguments {
     std::mutex m;
+    bool computer_wins = false, player_wins = false;
 };
 
 // Check if the given ship can fit

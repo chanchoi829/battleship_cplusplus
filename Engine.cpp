@@ -21,14 +21,21 @@ void Engine::run() {
     while (true) {
         // Player's turn
         player.turn();
-        if (player.get_ships_alive() == 0)
+        if (player.get_ships_alive() == 0) {
+            args->computer_wins = true;
             break;
+        }
 
         // Computer's turn
         computer.turn();
-        if (computer.get_ships_alive() == 0)
+        if (computer.get_ships_alive() == 0) {
+            args->player_wins = true;
             break;
+        }
+            
     }
+
+    display.join();
 
     delete args;
     return;

@@ -12,7 +12,7 @@ using namespace std;
 
 void Display::draw(Arguments* args) {
     initscr();
-    while (true) {
+    while (!args->computer_wins && !args->player_wins) {
         {
             unique_lock<mutex> lock_d(args->m);
             wmove(stdscr, 0, 0);
@@ -32,7 +32,14 @@ void Display::draw(Arguments* args) {
         }
         this_thread::sleep_for(chrono::milliseconds(30));
     }
-    //endwin();
+    endwin();
+
+    if (args->computer_wins) {
+        cout << "You Lose";
+    }
+    else {
+        cout << "You win";
+    }
 }
 
 // Draw computer's grid
