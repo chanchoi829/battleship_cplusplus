@@ -25,46 +25,47 @@ void Player::turn() {
         int row = point[0] - 'a', col = point.length() == 3 ? 9 : point[1] - '1';
 
         // Check if the point has been attacked already
-        if (computer_grid[row][col] == 'o' || computer_grid[row][col] == 'x')
+        if (computer_grid[row][col].first == Entity::Missed ||
+            (computer_grid[row][col].first == Entity::Vessel &&
+            computer_grid[row][col].second->is_hit(row, col)))
             continue;
 
         // Miss
-        if (computer_grid[row][col] == '.') {
-            engine.get_computer_grid().modify_grid(row, col, 'o');
+        if (computer_grid[row][col].first == Entity::Missed) {
+            engine.get_computer_grid().modify_grid(row, col, Entity::Vessel);
             return;
         }
 
-        int which_ship;
-        string ship;
-
-        convert_char_to_ship(computer_grid[row][col], ship, which_ship);
-
         // Increment the ship's damage taken
-        engine.get_computer_ships()[which_ship].inject_damage();
+        computer_grid[row][col].second->inject_damage(row, col);
 
         // When hp is 0, the ship sinks
-        if (engine.get_computer_ships()[which_ship].get_hp() == 0)
+        if (computer_grid[row][col].second->get_hp() == 0)
             engine.get_computer().sink_ship();
 
         // Mark the point
-        engine.get_computer_grid().modify_grid(row, col, 'x');
+        engine.get_computer_grid().modify_grid(row, col, Entity::Vessel);
         return;
     }
 }
 
 
 void Player::place_ship_random(const std::string& ship) {
-    Ship new_ship(ship);
+    shared_ptr<Ship> new_ship = make_shared<Ship>(ship);
 
     // Direction: left, up, right, down
     vector<int> points, directions = { -1, -10, 1, 10 };;
 
     // Generate random positions until the ship fits
-    while (!is_valid(engine.get_player_grid().get_grid(), points, rand() % 100, directions[rand() % 4], new_ship.get_hp())) {}
+    while (!is_valid(engine.get_player_grid().get_grid(), points, rand() % 100, directions[rand() % 4], new_ship->get_hp())) {}
 
+    vector<pair<int, int>> converted;
     // Place the ship
-    for (int position : points)
-        engine.get_player_grid().modify_grid(position / 10, position % 10, new_ship.get_letter());
+    for (int point : points)
+        converted.push_back(make_pair(point / 10, point % 10));
+
+    engine.get_player_grid().place_ship(converted, new_ship);
+    new_ship->assign_points(converted);
 
     // Set the ship's hp
     engine.push_player_ship(new_ship);

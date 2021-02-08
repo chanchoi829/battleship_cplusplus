@@ -67,12 +67,12 @@ void Engine::reset() {
     display = thread(Display::draw, args);
 }
 
-void Engine::push_computer_ship(Ship ship) {
+void Engine::push_computer_ship(shared_ptr<Ship> ship) {
     lock_guard<mutex>(args->m);
     computer_ships.push_back(ship);
 }
 
-void Engine::push_player_ship(Ship ship) {
+void Engine::push_player_ship(shared_ptr<Ship> ship) {
     player_ships.push_back(ship);
 }
 

@@ -8,10 +8,28 @@
 using namespace std;
 
 Grid::Grid() {
-    grid = vector<vector<char>>(10, vector<char>(10, '.'));
+    grid = vector<vector<pair<Entity, shared_ptr<Ship>>>>
+        (10, vector<pair<Entity, shared_ptr<Ship>>>
+            (10, make_pair(Entity::Sea, nullptr)));
 }
 
-void Grid::modify_grid(int row, int col, char c) {
+void Grid::place_ship(const vector<pair<int, int>>& points, shared_ptr<Ship> ship) {
     lock_guard<mutex> lock(engine.get_args()->m);
-    grid[row][col] = c;
+
+    for (const pair<int, int>& point : points) {
+        grid[point.first][point.second].first = Entity::Vessel;
+        grid[point.first][point.second].second = ship;
+    }
+
+}
+
+void Grid::modify_grid(int row, int col, Entity e) {
+    lock_guard<mutex> lock(engine.get_args()->m);
+    if (e == Entity::Missed)
+        grid[row][col].first = Entity::Missed;
+    else if (e == Entity::Vessel)
+        grid[row][col].second->inject_damage(row, col);
+    else {
+
+    }
 }

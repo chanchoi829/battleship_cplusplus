@@ -4,7 +4,7 @@
 using namespace std;
 
 // Check if the given ship can fit
-bool is_valid(const vector<vector<char>>& grid, vector<int>& positions, int point, int direction, int ship_length) {
+bool is_valid(const vector<vector<pair<Entity, shared_ptr<Ship>>>>& grid, vector<int>& positions, int point, int direction, int ship_length) {
     positions.clear();
 
     // Check if the ship fits
@@ -15,7 +15,7 @@ bool is_valid(const vector<vector<char>>& grid, vector<int>& positions, int poin
 
         // Check if the point is in range and if the ship can fit
         if (point < 0 || point > 99 || (point % 10 == 0 && direction == -1) || (point % 10 == 9 && direction == 1)
-            || grid[row][col] != '.') {
+            || grid[row][col].first != Entity::Sea) {
             ship_fits = false;
             break;
         }

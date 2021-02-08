@@ -13,6 +13,7 @@ Engine class
 #include <utility>
 #include <vector>
 #include <thread>
+#include <memory>
 
 struct Arguments;
 
@@ -22,16 +23,16 @@ public:
     void run();
     // Reset grids
     void reset();
-    void push_computer_ship(Ship ship);
-    void push_player_ship(Ship ship);
+    void push_computer_ship(std::shared_ptr<Ship> ship);
+    void push_player_ship(std::shared_ptr<Ship> ship);
 
     // For Singleton
     static Engine& get_instance();
 
     // Getters
-    std::vector<Ship>& get_computer_ships()
+    std::vector<std::shared_ptr<Ship>>& get_computer_ships()
     {return computer_ships;}
-    std::vector<Ship>& get_player_ships()
+    std::vector<std::shared_ptr<Ship>>& get_player_ships()
     {return player_ships;}
     Grid& get_computer_grid()
     {return computer_grid;}
@@ -62,7 +63,7 @@ private:
     Arguments* args;
     std::thread display;
 
-    std::vector<Ship> computer_ships, player_ships;
+    std::vector<std::shared_ptr<Ship>> computer_ships, player_ships;
 };
 
 #endif
