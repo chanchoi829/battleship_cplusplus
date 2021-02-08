@@ -11,7 +11,6 @@ using namespace std;
 
 Engine::Engine() {
     args = new Arguments;
-    display = thread(Display::draw, args);
 }
 
 // Run the game
@@ -57,6 +56,8 @@ void Engine::reset() {
     computer.place_ship("Cruiser");
     computer.place_ship("Battleship");
     computer.place_ship("Carrier");
+
+    display = thread(Display::draw, args);
 }
 
 void Engine::push_computer_ship(Ship ship) {

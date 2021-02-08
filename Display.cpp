@@ -32,7 +32,7 @@ void Display::draw(Arguments* args) {
         }
         this_thread::sleep_for(chrono::milliseconds(30));
     }
-    endwin();
+    //endwin();
 }
 
 // Draw computer's grid
