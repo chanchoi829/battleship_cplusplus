@@ -54,7 +54,6 @@ void Ship::inject_damage(int row, int col) {
 
 void Ship::get_status() {
     wprintw(stdscr, "Computer's %s (length %d):", name.c_str(), length);
-
     if (hp == 0)
         wprintw(stdscr, " sunk\n");
     else

@@ -5,7 +5,6 @@ Engine class
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "Ship.h"
 #include "Computer.h"
 #include "Grid.h"
 #include "Player.h"
@@ -15,7 +14,9 @@ Engine class
 #include <thread>
 #include <memory>
 
+
 struct Arguments;
+class Ship;
 
 class Engine {
 

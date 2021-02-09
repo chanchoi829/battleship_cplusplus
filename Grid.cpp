@@ -27,9 +27,4 @@ void Grid::modify_grid(int row, int col, Entity e) {
     lock_guard<mutex> lock(engine.get_args()->m);
     if (e == Entity::Missed)
         grid[row][col].first = Entity::Missed;
-    else if (e == Entity::Vessel)
-        grid[row][col].second->inject_damage(row, col);
-    else {
-
-    }
 }
