@@ -31,8 +31,8 @@ void Player::turn() {
             continue;
 
         // Miss
-        if (computer_grid[row][col].first == Entity::Missed) {
-            engine.get_computer_grid().modify_grid(row, col, Entity::Vessel);
+        if (computer_grid[row][col].first == Entity::Sea) {
+            engine.get_computer_grid().modify_grid(row, col, Entity::Missed);
             return;
         }
 

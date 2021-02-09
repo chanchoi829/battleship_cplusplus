@@ -20,7 +20,7 @@ void Display::draw(Arguments* args) {
             draw_player_grid();
 
             // Show which computer ships have sunk
-            wprintw(stdscr, "\n");
+            //wprintw(stdscr, "\n");
             engine.get_computer_ships()[0]->get_status();
             engine.get_computer_ships()[1]->get_status();
             engine.get_computer_ships()[2]->get_status();
@@ -32,14 +32,12 @@ void Display::draw(Arguments* args) {
         }
         this_thread::sleep_for(chrono::milliseconds(30));
     }
-    endwin();
+    //endwin();
 
-    if (args->computer_wins) {
+    if (args->computer_wins)
         cout << "You Lose";
-    }
-    else {
+    else
         cout << "You win";
-    }
 }
 
 // Draw computer's grid
@@ -57,10 +55,27 @@ void Display::draw_computer_grid() {
         wprintw(stdscr, "%c ", i);
 
         for (int j = 0; j < 10; ++j) {
-            char tmp = engine.get_computer_grid().get_grid()[i - 'A'][j];
+            Entity e = engine.get_computer_grid().get_grid()[i - 'A'][j].first;
+            shared_ptr<Ship> ship = engine.get_computer_grid().get_grid()[i - 'A'][j].second;
+            char tmp;
             // Do not show ships' locations to the player
-            if (tmp != '.' && tmp != 'o' && tmp != 'x')
-                tmp = '.';
+            switch (e) {
+                case Entity::Missed:
+                    tmp = 'o';
+                    break;
+                case Entity::Sea:
+                    tmp = '.';
+                    break;
+                case Entity::Vessel:
+                    if (ship->is_hit(i - 'A', j))
+                        tmp = 'x';
+                    else
+                        tmp = '.';
+                    break;
+                case Entity::Null:
+                    tmp = '?';
+                    break;
+            }
             wprintw(stdscr, "%c ", tmp);
         }
 
@@ -83,10 +98,26 @@ void Display::draw_player_grid() {
         wprintw(stdscr, "%c ", i);
 
         for (int j = 0; j < 10; ++j) {
-            char tmp = engine.get_player_grid().get_grid()[i - 'A'][j];
-            // Don't show computer's missed attacks
-            if (tmp == 'o')
-                tmp = '.';
+            Entity e = engine.get_player_grid().get_grid()[i - 'A'][j].first;
+            shared_ptr<Ship> ship = engine.get_player_grid().get_grid()[i - 'A'][j].second;
+
+            char tmp;
+            switch (e) {
+                // Don't show computer's missed attacks
+                case Entity::Missed:
+                case Entity::Sea:
+                    tmp = '.';
+                    break;
+                case Entity::Vessel:
+                    if (ship->is_hit(i - 'A', j))
+                        tmp = 'x';
+                    else
+                        tmp = ship->get_letter();
+                    break;
+                case Entity::Null:
+                    tmp = '?';
+                    break;
+            }
             wprintw(stdscr, "%c ", tmp);
         }
 

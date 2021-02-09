@@ -15,26 +15,31 @@ Ship::Ship(const std::string& name_) {
         length = 2;
         hp = 2;
         letter = 'd';
+        hit = vector<bool>(2, false);
     }
     else if (name_ == "Submarine"){
         length = 3;
         hp = 3;
         letter = 's';
+        hit = vector<bool>(3, false);
     }
     else if (name_ == "Cruiser") {
         length = 3;
         hp = 3;
         letter = 'c';
+        hit = vector<bool>(3, false);
     }
     else if (name_ == "Battleship") {
         length = 4;
         hp = 4;
         letter = 'b';
+        hit = vector<bool>(4, false);
     }
     else {
         length = 5;
         hp = 5;
         letter = 'C';
+        hit = vector<bool>(5, false);
     }
 
     name = name_;
