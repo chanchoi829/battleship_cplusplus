@@ -14,13 +14,13 @@ void Display::draw(Arguments* args) {
     initscr();
     while (!args->computer_wins && !args->player_wins) {
         {
-            unique_lock<mutex> lock_d(args->m);
+            lock_guard<mutex> lock_d(args->m);
             wmove(stdscr, 0, 0);
             draw_computer_grid();
             draw_player_grid();
 
             // Show which computer ships have sunk
-            //wprintw(stdscr, "\n");
+            wprintw(stdscr, "\n");
             engine.get_computer_ships()[0]->get_status();
             engine.get_computer_ships()[1]->get_status();
             engine.get_computer_ships()[2]->get_status();
@@ -28,11 +28,10 @@ void Display::draw(Arguments* args) {
             engine.get_computer_ships()[4]->get_status();
 
             wrefresh(stdscr);
-            lock_d.unlock();
         }
         this_thread::sleep_for(chrono::milliseconds(30));
     }
-    //endwin();
+    endwin();
 
     if (args->computer_wins)
         cout << "You Lose";

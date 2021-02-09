@@ -83,7 +83,7 @@ void Computer::turn() {
                 }
 
                 // Mark the grid
-                engine.get_player_grid().modify_grid(row, col, Entity::Missed);
+                engine.get_player_grid().modify_grid(row, col, Entity::Vessel);
             }
             return;
         }
