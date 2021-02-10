@@ -43,7 +43,7 @@ public:
     {return computer;}
     Player& get_player()
     {return player;}
-    Arguments* get_args()
+    std::shared_ptr<Arguments> get_args()
     {return args;}
 
     // Disallow copy/move construction or assignment
@@ -61,7 +61,7 @@ private:
     Computer computer;
     Player player;
 
-    Arguments* args;
+    std::shared_ptr<Arguments> args;
     std::thread display;
 
     std::vector<std::shared_ptr<Ship>> computer_ships, player_ships;

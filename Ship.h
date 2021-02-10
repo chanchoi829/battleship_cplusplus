@@ -19,6 +19,10 @@ public:
 	{return letter;}
 	int get_hp()
 	{return hp;}
+	int get_length()
+	{return length;}
+	std::vector<std::pair<int, int>> get_points()
+	{return points;}
 
 private:
 	std::vector<std::pair<int, int>> points;

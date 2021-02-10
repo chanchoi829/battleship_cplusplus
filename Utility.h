@@ -1,17 +1,21 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
-#include "Ship.h"
 #include <mutex>
 #include <string>
 #include <thread>
+#include <utility>
 #include <vector>
 
 #define engine Engine::get_instance()
 
+class Ship;
+
 struct Arguments {
     std::mutex m;
-    bool computer_wins = false, player_wins = false;
+    std::pair<int, int> computer_attack, player_attack;
+    bool computer_wins = false, player_wins = false, computer_start = false, player_start = false;
+
 };
 
 enum Entity { Vessel, Missed, Sea, Null };

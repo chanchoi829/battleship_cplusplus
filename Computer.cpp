@@ -1,5 +1,6 @@
 #include "Computer.h"
 #include "Engine.h"
+#include "Ship.h"
 #include "Utility.h"
 #include <iostream>
 #include <string>
@@ -62,6 +63,9 @@ void Computer::turn() {
 
         // Attack a point that has not been attacked
         if (can_attack(row, col)) {
+            lock_guard<mutex>(engine.get_args()->m);
+            engine.get_args()->computer_attack = make_pair(row, col);
+            engine.get_args()->computer_start = true;
             // Miss
             if (player_grid[row][col].first == Entity::Sea)
                 engine.get_player_grid().modify_grid(row, col, Entity::Missed);

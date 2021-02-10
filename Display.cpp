@@ -1,23 +1,30 @@
 #include "Display.h"
 #include "Engine.h"
 #include "Grid.h"
+#include "Ship.h"
 #include "Utility.h"
 #include <chrono>
 #include <iostream>
+#include <memory>
 #include <mutex>
 #include <ncurses.h>
 #include <thread>
 
 using namespace std;
 
-void Display::draw(Arguments* args) {
+void Display::draw(shared_ptr<Arguments> args) {
     initscr();
+    bool blink = false;
     while (!args->computer_wins && !args->player_wins) {
         {
             lock_guard<mutex> lock_d(args->m);
+            shared_ptr<Arguments> c = (args->computer_start) ? args : nullptr;
+            shared_ptr<Arguments> p = (args->player_start) ? args : nullptr;
+
             wmove(stdscr, 0, 0);
-            draw_computer_grid();
-            draw_player_grid();
+
+            draw_computer_grid(c, blink);
+            draw_player_grid(p, blink);
 
             // Show which computer ships have sunk
             wprintw(stdscr, "\n");
@@ -30,6 +37,7 @@ void Display::draw(Arguments* args) {
             wrefresh(stdscr);
         }
         this_thread::sleep_for(chrono::milliseconds(30));
+        blink = !blink;
     }
     endwin();
 
@@ -40,7 +48,7 @@ void Display::draw(Arguments* args) {
 }
 
 // Draw computer's grid
-void Display::draw_computer_grid() {
+void Display::draw_computer_grid(shared_ptr<Arguments> args, bool blink) {
     wprintw(stdscr, "\n      Enemy Grid\n\n  ");
 
     // Print numbers
@@ -83,7 +91,7 @@ void Display::draw_computer_grid() {
 }
 
 // Draw player's grid
-void Display::draw_player_grid() {
+void Display::draw_player_grid(shared_ptr<Arguments> args, bool blink) {
     wprintw(stdscr, "\n      Your Grid\n\n  ");
 
     // Print numbers
@@ -117,6 +125,20 @@ void Display::draw_player_grid() {
                     tmp = '?';
                     break;
             }
+
+            // Recently attacked spot blinks
+            if (args && blink && args->computer_attack.first == i - 'A' &&
+                args->computer_attack.second == j)
+                tmp = ' ';
+
+            // Ship blinks when it recently has been attacked
+            for (int i = 0; args && blink && ship && i < ship->get_length(); ++i) {
+                if (ship->get_points()[i].first == i - 'A' && ship->get_points()[i].second == j) {
+                    tmp = ' ';
+                    break;
+                }
+            }
+
             wprintw(stdscr, "%c ", tmp);
         }
 

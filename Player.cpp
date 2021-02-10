@@ -30,6 +30,9 @@ void Player::turn() {
             computer_grid[row][col].second->is_hit(row, col)))
             continue;
 
+        lock_guard<mutex>(engine.get_args()->m);
+        engine.get_args()->player_start = true;
+        engine.get_args()->player_attack = make_pair(row, col);
         // Miss
         if (computer_grid[row][col].first == Entity::Sea) {
             engine.get_computer_grid().modify_grid(row, col, Entity::Missed);

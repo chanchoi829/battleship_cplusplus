@@ -10,7 +10,7 @@
 using namespace std;
 
 Engine::Engine() {
-    args = new Arguments;
+    args = make_shared<Arguments>();
 }
 
 // Run the game
@@ -36,8 +36,6 @@ void Engine::run() {
     }
 
     display.join();
-
-    delete args;
     return;
 }
 
