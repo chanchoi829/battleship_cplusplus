@@ -12,24 +12,24 @@
 
 using namespace std;
 
-void Display::draw(shared_ptr<Arguments> args) {
+#define args engine.get_args()
+
+Display::Display() {
+    blink = false;
+    counter = 0;
+    temp_counter = 0;
+}
+
+void Display::draw() {
     initscr();
-    bool blink = false;
     while (!args->computer_wins && !args->player_wins) {
         {
             lock_guard<mutex> lock_d(args->m);
 
             wmove(stdscr, 0, 0);
 
-            if (args->computer_start)
-                draw_computer_grid(args, blink);
-            else
-                draw_computer_grid(nullptr, blink);
-
-            if (args->player_start)
-                draw_player_grid(args, blink);
-            else
-                draw_player_grid(nullptr, blink);
+            draw_computer_grid();
+            draw_player_grid();
 
             // Show which computer ships have sunk
             wprintw(stdscr, "\n");
@@ -40,9 +40,11 @@ void Display::draw(shared_ptr<Arguments> args) {
             engine.get_computer_ships()[4]->get_status();
 
             wrefresh(stdscr);
+
+            if (args->recently_attacked)
+                blink_control(15, 60);
         }
         this_thread::sleep_for(chrono::milliseconds(30));
-        blink = !blink;
     }
     endwin();
 
@@ -53,7 +55,7 @@ void Display::draw(shared_ptr<Arguments> args) {
 }
 
 // Draw computer's grid
-void Display::draw_computer_grid(shared_ptr<Arguments> args, bool blink) {
+void Display::draw_computer_grid() {
     wprintw(stdscr, "\n      Enemy Grid\n\n  ");
 
     // Print numbers
@@ -90,11 +92,11 @@ void Display::draw_computer_grid(shared_ptr<Arguments> args, bool blink) {
             }
 
             // Recently attacked spot blinks
-            if (args && blink && args->player_attack.first == i - 'A' &&
+            if (args->computer_attack.first != -1 && blink && args->player_attack.first == i - 'A' &&
                 args->player_attack.second == j)
                 tmp = ' ';
 
-            if (args && blink && ship && ship->get_recently_sunk())
+            if (args->computer_attack.first != -1 && blink && ship && ship->get_recently_sunk())
                 tmp = ' ';
 
             wprintw(stdscr, "%c ", tmp);
@@ -105,7 +107,7 @@ void Display::draw_computer_grid(shared_ptr<Arguments> args, bool blink) {
 }
 
 // Draw player's grid
-void Display::draw_player_grid(shared_ptr<Arguments> args, bool blink) {
+void Display::draw_player_grid() {
     wprintw(stdscr, "\n      Your Grid\n\n  ");
 
     // Print numbers
@@ -141,12 +143,12 @@ void Display::draw_player_grid(shared_ptr<Arguments> args, bool blink) {
             }
 
             // Recently attacked spot blinks
-            if (args && blink && args->computer_attack.first == i - 'A' &&
+            if (args->player_attack.first != -1 && blink && args->computer_attack.first == i - 'A' &&
                 args->computer_attack.second == j)
                 tmp = ' ';
 
             // Ship blinks when it recently has been attacked
-            for (int i = 0; args && blink && ship && i < ship->get_length(); ++i) {
+            for (int i = 0; args->player_attack.first != -1 && blink && ship && i < ship->get_length(); ++i) {
                 if (ship->get_points()[i].first == args->computer_attack.first && ship->get_points()[i].second == args->computer_attack.second) {
                     tmp = ' ';
                     break;
@@ -158,4 +160,24 @@ void Display::draw_player_grid(shared_ptr<Arguments> args, bool blink) {
 
         wprintw(stdscr, "\n");
     }
+}
+
+void Display::blink_control(int freq, int limit) {
+    if (counter == limit) {
+        counter = 0;
+        temp_counter = 0;
+        blink = false;
+        args->recently_attacked = false;
+    }
+    else {
+        if (temp_counter < freq) {
+            ++temp_counter;
+            ++counter;
+        }
+        else {
+            temp_counter = 0;
+            blink = !blink;
+        }
+    }
+    
 }

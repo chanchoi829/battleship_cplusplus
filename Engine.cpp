@@ -14,10 +14,16 @@ Engine::Engine() {
     args = make_shared<Arguments>();
     args->computer_attack = make_pair(-1, -1);
     args->player_attack = make_pair(-1, -1);
-    args->computer_start = false;
-    args->player_start = false;
     args->computer_wins = false;
     args->player_wins = false;
+    args->recently_attacked = false;
+
+    // Intialize default grids
+    computer_grid = Grid();
+    player_grid = Grid();
+    computer = Computer();
+    player = Player();
+    display = Display();
 }
 
 // Run the game
@@ -41,19 +47,12 @@ void Engine::run() {
         }
     }
 
-    display.join();
+    display_thread.join();
     return;
 }
 
 // Reset grids
 void Engine::reset() {
-    // Intialize default grids
-    computer_grid = Grid();
-    player_grid = Grid();
-
-    computer = Computer();
-    player = Player();
-
     // Create computer's grid
     player.place_ship_random("Destroyer");
     player.place_ship_random("Submarine");
@@ -68,7 +67,8 @@ void Engine::reset() {
     computer.place_ship("Battleship");
     computer.place_ship("Carrier");
 
-    display = thread(Display::draw, args);
+
+    display_thread = thread(&Display::draw, display);
 }
 
 void Engine::push_computer_ship(shared_ptr<Ship> ship) {

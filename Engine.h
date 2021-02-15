@@ -6,6 +6,7 @@ Engine class
 #define ENGINE_H
 
 #include "Computer.h"
+#include "Display.h"
 #include "Grid.h"
 #include "Player.h"
 #include <string>
@@ -60,9 +61,10 @@ private:
     Grid computer_grid, player_grid;
     Computer computer;
     Player player;
+    Display display;
 
     std::shared_ptr<Arguments> args;
-    std::thread display;
+    std::thread display_thread;
 
     std::vector<std::shared_ptr<Ship>> computer_ships, player_ships;
 };

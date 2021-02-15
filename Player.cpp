@@ -35,7 +35,7 @@ void Player::turn() {
             continue;
 
         lock_guard<mutex> lock(engine.get_args()->m);
-        engine.get_args()->player_start = true;
+        engine.get_args()->recently_attacked = true;
         engine.get_args()->player_attack = make_pair(row, col);
 
         // Miss
