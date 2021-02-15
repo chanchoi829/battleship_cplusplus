@@ -18,14 +18,20 @@ void Display::draw(shared_ptr<Arguments> args) {
     while (!args->computer_wins && !args->player_wins) {
         {
             lock_guard<mutex> lock_d(args->m);
-            shared_ptr<Arguments> c = (args->computer_start) ? args : nullptr;
-            shared_ptr<Arguments> p = (args->player_start) ? args : nullptr;
 
             wmove(stdscr, 0, 0);
 
-            draw_computer_grid(c, blink);
-            draw_player_grid(p, blink);
+            if (args->computer_start)
+                draw_computer_grid(args, blink);
+            else
+                draw_computer_grid(nullptr, blink);
 
+            if (args->player_start)
+                draw_player_grid(args, blink);
+            else
+                draw_player_grid(nullptr, blink);
+            wprintw(stdscr, "%d\n", args->computer_start);
+            wprintw(stdscr, "%d\n", args->player_start);
             // Show which computer ships have sunk
             wprintw(stdscr, "\n");
             engine.get_computer_ships()[0]->get_status();

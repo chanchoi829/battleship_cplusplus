@@ -20,6 +20,7 @@ void Engine::run() {
 
     while (true) {
         // Player's turn
+        
         player.turn();
         if (player.get_ships_alive() == 0) {
             args->computer_wins = true;
@@ -32,7 +33,6 @@ void Engine::run() {
             args->player_wins = true;
             break;
         }
-            
     }
 
     display.join();

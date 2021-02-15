@@ -1,7 +1,7 @@
 CC = g++
 LD = g++
 
-CFLAGS = -c -pedantic-errors -std=c++14 -Wall
+CFLAGS = -c -pedantic-errors -std=c++14 -Wall -g
 LFLAGS = -pedantic-errors -Wall
 
 OBJS = main.o Computer.o Display.o Engine.o Grid.o Player.o Ship.o Utility.o

@@ -63,12 +63,14 @@ void Computer::turn() {
 
         // Attack a point that has not been attacked
         if (can_attack(row, col)) {
-            lock_guard<mutex>(engine.get_args()->m);
+            lock_guard<mutex> lock(engine.get_args()->m);
             engine.get_args()->computer_attack = make_pair(row, col);
             engine.get_args()->computer_start = true;
             // Miss
-            if (player_grid[row][col].first == Entity::Sea)
+            if (player_grid[row][col].first == Entity::Sea) {
                 engine.get_player_grid().modify_grid(row, col, Entity::Missed);
+            }
+                
             // Hit
             else {
                 player_grid[row][col].second->inject_damage(row, col);
@@ -89,6 +91,7 @@ void Computer::turn() {
                 // Mark the grid
                 engine.get_player_grid().modify_grid(row, col, Entity::Vessel);
             }
+
             return;
         }
     }

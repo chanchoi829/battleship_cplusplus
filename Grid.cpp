@@ -24,7 +24,6 @@ void Grid::place_ship(const vector<pair<int, int>>& points, shared_ptr<Ship> shi
 }
 
 void Grid::modify_grid(int row, int col, Entity e) {
-    lock_guard<mutex> lock(engine.get_args()->m);
     if (e == Entity::Missed)
         grid[row][col].first = Entity::Missed;
 }
