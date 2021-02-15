@@ -8,6 +8,7 @@ Ship::Ship() {
     length = -1;
     hp = -1;
     letter = ' ';
+    recently_sunk = false;
 }
 
 Ship::Ship(const std::string& name_) {
@@ -47,9 +48,12 @@ Ship::Ship(const std::string& name_) {
 
 void Ship::inject_damage(int row, int col) {
     --hp;
+
+    if (hp == 0)
+        recently_sunk = true;
+
     int offset = abs(row - points[0].first) + abs(col - points[0].second);
     hit[offset] = true;
-
 }
 
 void Ship::get_status() {
@@ -67,4 +71,8 @@ void Ship::assign_points(vector<pair<int, int>>& points_) {
 bool Ship::is_hit(int row, int col) {
     int offset = abs(row - points[0].first) + abs(col - points[0].second);
     return hit[offset];
+}
+
+void Ship::reset_recently_sunk() {
+    recently_sunk = false;
 }

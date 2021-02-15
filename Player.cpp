@@ -21,6 +21,10 @@ void Player::turn() {
         // Read in a point
         string point;
         read_point(point);
+
+        for (const shared_ptr<Ship>& p : engine.get_computer_ships())
+            p->reset_recently_sunk();
+
         // Convert to row and col
         int row = point[0] - 'a', col = point.length() == 3 ? 9 : point[1] - '1';
 

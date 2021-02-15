@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Grid.h"
 #include "Player.h"
+#include "Ship.h"
 #include "Utility.h"
 #include <algorithm>
 #include <iostream>
@@ -20,7 +21,6 @@ void Engine::run() {
 
     while (true) {
         // Player's turn
-        
         player.turn();
         if (player.get_ships_alive() == 0) {
             args->computer_wins = true;
@@ -66,7 +66,7 @@ void Engine::reset() {
 }
 
 void Engine::push_computer_ship(shared_ptr<Ship> ship) {
-    lock_guard<mutex>(args->m);
+    lock_guard<mutex> lock(args->m);
     computer_ships.push_back(ship);
 }
 

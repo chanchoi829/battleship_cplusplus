@@ -20,7 +20,6 @@ void Grid::place_ship(const vector<pair<int, int>>& points, shared_ptr<Ship> shi
         grid[point.first][point.second].first = Entity::Vessel;
         grid[point.first][point.second].second = ship;
     }
-
 }
 
 void Grid::modify_grid(int row, int col, Entity e) {
