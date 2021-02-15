@@ -1,6 +1,6 @@
+#include "Engine.h"
 #include "Computer.h"
 #include "Display.h"
-#include "Engine.h"
 #include "Grid.h"
 #include "Player.h"
 #include "Ship.h"
@@ -12,6 +12,12 @@ using namespace std;
 
 Engine::Engine() {
     args = make_shared<Arguments>();
+    args->computer_attack = make_pair(-1, -1);
+    args->player_attack = make_pair(-1, -1);
+    args->computer_start = false;
+    args->player_start = false;
+    args->computer_wins = false;
+    args->player_wins = false;
 }
 
 // Run the game

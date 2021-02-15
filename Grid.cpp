@@ -1,8 +1,6 @@
 #include "Grid.h"
-#include "Engine.h"
 #include "Ship.h"
 #include "Utility.h"
-#include <iostream>
 #include <mutex>
 
 using namespace std;
@@ -14,8 +12,6 @@ Grid::Grid() {
 }
 
 void Grid::place_ship(const vector<pair<int, int>>& points, shared_ptr<Ship> ship) {
-    lock_guard<mutex> lock(engine.get_args()->m);
-
     for (const pair<int, int>& point : points) {
         grid[point.first][point.second].first = Entity::Vessel;
         grid[point.first][point.second].second = ship;

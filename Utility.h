@@ -13,8 +13,8 @@ class Ship;
 
 struct Arguments {
     std::mutex m;
-    std::pair<int, int> computer_attack = std::make_pair(-1, -1), player_attack = std::make_pair(-1, -1);
-    bool computer_wins = false, player_wins = false, computer_start = false, player_start = false;
+    std::pair<int, int> computer_attack, player_attack;
+    bool computer_wins, player_wins, computer_start, player_start;
 
 };
 
