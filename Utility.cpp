@@ -26,28 +26,3 @@ bool is_valid(const vector<vector<pair<Entity, shared_ptr<Ship>>>>& grid, vector
 
     return ship_fits;
 }
-
-
-// Convert a char to a ship name
-void convert_char_to_ship(char ship_char, string& ship, int& which_ship) {
-    if (ship_char == 'd') {
-        which_ship = 0;
-        ship = "Destroyer";
-    }
-    else if (ship_char == 's') {
-        which_ship = 1;
-        ship = "Submarine";
-    }
-    else if (ship_char == 'c') {
-        which_ship = 2;
-        ship = "Cruiser";
-    }
-    else if (ship_char == 'b') {
-        which_ship = 3;
-        ship = "Battleship";
-    }
-    else {
-        which_ship = 4;
-        ship = "Carrier";
-    }
-}
