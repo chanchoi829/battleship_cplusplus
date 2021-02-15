@@ -6,7 +6,6 @@
 #include "Ship.h"
 #include "Utility.h"
 #include <algorithm>
-#include <iostream>
 
 using namespace std;
 
@@ -24,12 +23,25 @@ Engine::Engine() {
     computer = Computer();
     player = Player();
     display = Display();
+
+    display_thread = thread(&Display::draw, display);
 }
 
 // Run the game
 void Engine::run() {
-    // Reset the game
-    reset();
+    // Create computer's grid
+    player.place_ship_random("Destroyer");
+    player.place_ship_random("Submarine");
+    player.place_ship_random("Cruiser");
+    player.place_ship_random("Battleship");
+    player.place_ship_random("Carrier");
+
+    // Create player's grid
+    computer.place_ship("Destroyer");
+    computer.place_ship("Submarine");
+    computer.place_ship("Cruiser");
+    computer.place_ship("Battleship");
+    computer.place_ship("Carrier");
 
     while (true) {
         // Player's turn
@@ -49,26 +61,6 @@ void Engine::run() {
 
     display_thread.join();
     return;
-}
-
-// Reset grids
-void Engine::reset() {
-    // Create computer's grid
-    player.place_ship_random("Destroyer");
-    player.place_ship_random("Submarine");
-    player.place_ship_random("Cruiser");
-    player.place_ship_random("Battleship");
-    player.place_ship_random("Carrier");
-
-    // Create player's grid
-    computer.place_ship("Destroyer");
-    computer.place_ship("Submarine");
-    computer.place_ship("Cruiser");
-    computer.place_ship("Battleship");
-    computer.place_ship("Carrier");
-
-
-    display_thread = thread(&Display::draw, display);
 }
 
 void Engine::push_computer_ship(shared_ptr<Ship> ship) {

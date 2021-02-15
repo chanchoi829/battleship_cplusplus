@@ -8,7 +8,7 @@
 #include <vector>
 
 #define player_grid Engine::get_instance().get_player_grid().get_grid()
-#define can_attack(r, c) (player_grid[r][c].first == Entity::Sea || (player_grid[r][c].first == Entity::Vessel && !player_grid[r][c].second->is_hit(r, c)))
+#define can_attack(r, c) (player_grid[r][c].e == Entity::Sea || (player_grid[r][c].e == Entity::Vessel && !player_grid[r][c].ship->is_hit(r, c)))
 
 using namespace std;
 
@@ -66,16 +66,16 @@ void Computer::turn() {
             lock_guard<mutex> lock(engine.get_args()->m);
             engine.get_args()->computer_attack = make_pair(row, col);
             // Miss
-            if (player_grid[row][col].first == Entity::Sea) {
+            if (player_grid[row][col].e == Entity::Sea) {
                 engine.get_player_grid().modify_grid(row, col, Entity::Missed);
             }
                 
             // Hit
             else {
-                player_grid[row][col].second->inject_damage(row, col);
+                player_grid[row][col].ship->inject_damage(row, col);
 
                 // Ship has been sunk
-                if (player_grid[row][col].second->get_hp() == 0) {
+                if (player_grid[row][col].ship->get_hp() == 0) {
                     engine.get_player().sink_ship();
                     row_prev = -1;
                     col_prev = -1;

@@ -1,6 +1,7 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
+#include <memory>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -20,7 +21,13 @@ struct Arguments {
 
 enum Entity { Vessel, Missed, Sea, Null };
 
+struct Cell {
+    Entity e = Entity::Sea;
+    std::shared_ptr<Ship> ship;
+    bool animation = false;
+};
+
 // Check if the given ship can fit
-bool is_valid(const std::vector<std::vector<std::pair<Entity, std::shared_ptr<Ship>>>>& grid, std::vector<int>& positions, int point, int direction, int ship_length);
+bool is_valid(const std::vector<std::vector<Cell>>& grid, std::vector<int>& positions, int point, int direction, int ship_length);
 
 #endif

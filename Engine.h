@@ -24,7 +24,6 @@ class Engine {
 public:
     void run();
     // Reset grids
-    void reset();
     void push_computer_ship(std::shared_ptr<Ship> ship);
     void push_player_ship(std::shared_ptr<Ship> ship);
 

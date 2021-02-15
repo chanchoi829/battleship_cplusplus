@@ -14,11 +14,11 @@ public:
 
     void place_ship(const std::vector<std::pair<int, int>>& points, std::shared_ptr<Ship> ship);
     void modify_grid(int row, int col, Entity e);
-    std::vector<std::vector<std::pair<Entity, std::shared_ptr<Ship>>>>& get_grid()
+    std::vector<std::vector<Cell>>& get_grid()
     {return grid;}
 
 private:
-    std::vector<std::vector<std::pair<Entity, std::shared_ptr<Ship>>>> grid;
+    std::vector<std::vector<Cell>> grid;
 };
 
 #endif

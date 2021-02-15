@@ -5,7 +5,6 @@
 #include "Utility.h"
 #include <algorithm>
 #include <iostream>
-#include <ncurses.h>
 
 using namespace std;
 
@@ -29,9 +28,9 @@ void Player::turn() {
         int row = point[0] - 'a', col = point.length() == 3 ? 9 : point[1] - '1';
 
         // Check if the point has been attacked already
-        if (computer_grid[row][col].first == Entity::Missed ||
-            (computer_grid[row][col].first == Entity::Vessel &&
-            computer_grid[row][col].second->is_hit(row, col)))
+        if (computer_grid[row][col].e == Entity::Missed ||
+            (computer_grid[row][col].e == Entity::Vessel &&
+            computer_grid[row][col].ship->is_hit(row, col)))
             continue;
 
         lock_guard<mutex> lock(engine.get_args()->m);
@@ -39,16 +38,16 @@ void Player::turn() {
         engine.get_args()->player_attack = make_pair(row, col);
 
         // Miss
-        if (computer_grid[row][col].first == Entity::Sea) {
+        if (computer_grid[row][col].e == Entity::Sea) {
             engine.get_computer_grid().modify_grid(row, col, Entity::Missed);
             return;
         }
 
         // Increment the ship's damage taken
-        computer_grid[row][col].second->inject_damage(row, col);
+        computer_grid[row][col].ship->inject_damage(row, col);
 
         // When hp is 0, the ship sinks
-        if (computer_grid[row][col].second->get_hp() == 0)
+        if (computer_grid[row][col].ship->get_hp() == 0)
             engine.get_computer().sink_ship();
 
         // Mark the point

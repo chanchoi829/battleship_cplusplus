@@ -69,8 +69,8 @@ void Display::draw_computer_grid() {
         wprintw(stdscr, "%c ", i);
 
         for (int j = 0; j < 10; ++j) {
-            Entity e = engine.get_computer_grid().get_grid()[i - 'A'][j].first;
-            shared_ptr<Ship> ship = engine.get_computer_grid().get_grid()[i - 'A'][j].second;
+            Entity e = engine.get_computer_grid().get_grid()[i - 'A'][j].e;
+            shared_ptr<Ship> ship = engine.get_computer_grid().get_grid()[i - 'A'][j].ship;
             char tmp;
             // Do not show ships' locations to the player
             switch (e) {
@@ -121,8 +121,8 @@ void Display::draw_player_grid() {
         wprintw(stdscr, "%c ", i);
 
         for (int j = 0; j < 10; ++j) {
-            Entity e = engine.get_player_grid().get_grid()[i - 'A'][j].first;
-            shared_ptr<Ship> ship = engine.get_player_grid().get_grid()[i - 'A'][j].second;
+            Entity e = engine.get_player_grid().get_grid()[i - 'A'][j].e;
+            shared_ptr<Ship> ship = engine.get_player_grid().get_grid()[i - 'A'][j].ship;
 
             char tmp;
             switch (e) {
@@ -145,7 +145,7 @@ void Display::draw_player_grid() {
             // Recently attacked spot blinks
             if (args->player_attack.first != -1 && blink && args->computer_attack.first == i - 'A' &&
                 args->computer_attack.second == j)
-                tmp = ' ';
+                
 
             // Ship blinks when it recently has been attacked
             for (int i = 0; args->player_attack.first != -1 && blink && ship && i < ship->get_length(); ++i) {
@@ -179,5 +179,4 @@ void Display::blink_control(int freq, int limit) {
             blink = !blink;
         }
     }
-    
 }
