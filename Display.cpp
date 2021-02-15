@@ -4,6 +4,7 @@
 #include "Ship.h"
 #include "Utility.h"
 #include <chrono>
+#include <coroutine>
 #include <iostream>
 #include <memory>
 #include <mutex>

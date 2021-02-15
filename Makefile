@@ -1,8 +1,6 @@
 CC = g++
-LD = g++
 
-CFLAGS = -c -pedantic-errors -std=c++14 -Wall -g
-LFLAGS = -pedantic-errors -Wall
+CFLAGS = -pedantic-errors  -Wall -g -fcoroutines
 
 OBJS = main.o Computer.o Display.o Engine.o Grid.o Player.o Ship.o Utility.o
 PROG = battleship
@@ -10,31 +8,31 @@ PROG = battleship
 default: $(PROG)
 
 $(PROG): $(OBJS)
-	$(LD) $(LFLAGS) $(OBJS) -pthread -g -lncurses -o $(PROG)
+	$(CC) $(CFLAGS) $(OBJS) -o $(PROG) -lncurses -pthread
 
-main.o: main.cpp
-	$(CC) $(CFLAGS) main.cpp
+main.o: main.cpp Engine.h Utility.h
+	$(CC) $(CFLAGS) -c main.cpp
 
-Computer.o: Computer.cpp Computer.h
-	$(CC) $(CFLAGS) Computer.cpp
+Computer.o: Computer.cpp Computer.h Engine.h Ship.h
+	$(CC) $(CFLAGS) -c Computer.cpp
 
-Display.o: Display.cpp Display.h
-	$(CC) $(CFLAGS) Display.cpp
+Display.o: Display.cpp Display.h Engine.h Grid.h Ship.h Utility.h
+	$(CC) $(CFLAGS) -c Display.cpp
 
-Engine.o: Engine.cpp Engine.h 
-	$(CC) $(CFLAGS) Engine.cpp
+Engine.o: Engine.cpp Engine.h Computer.h Display.h Grid.h Player.h Ship.h Utility.h
+	$(CC) $(CFLAGS) -c Engine.cpp
 
-Grid.o: Grid.cpp Grid.h
-	$(CC) $(CFLAGS) Grid.cpp
+Grid.o: Grid.cpp Grid.h Ship.h Utility.h
+	$(CC) $(CFLAGS) -c Grid.cpp
 
-Player.o: Player.cpp Player.h
-	$(CC) $(CFLAGS) Player.cpp
+Player.o: Player.cpp Player.h Engine.h Ship.h Utility.h
+	$(CC) $(CFLAGS) -c Player.cpp
 
 Ship.o: Ship.cpp Ship.h
-	$(CC) $(CFLAGS) Ship.cpp
+	$(CC) $(CFLAGS) -c Ship.cpp
 
 Utility.o: Utility.cpp Utility.h
-	$(CC) $(CFLAGS) Utility.cpp
+	$(CC) $(CFLAGS) -c Utility.cpp
 
 clean:
 	rm -f *.o

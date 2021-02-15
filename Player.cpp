@@ -1,6 +1,5 @@
-#include "Display.h"
-#include "Engine.h"
 #include "Player.h"
+#include "Engine.h"
 #include "Ship.h"
 #include "Utility.h"
 #include <algorithm>
