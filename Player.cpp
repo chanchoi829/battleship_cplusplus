@@ -53,6 +53,10 @@ void Player::turn() {
         // Mark the point
         engine.get_computer_grid().modify_grid(row, col, Entity::Vessel);
 
+        // Mark points for animation
+        for (const pair<int, int>& p : computer_grid[row][col].ship->get_points())
+            computer_grid[p.first][p.second].animation = true;
+
         return;
     }
 }

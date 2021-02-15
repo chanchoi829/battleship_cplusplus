@@ -65,17 +65,21 @@ void Computer::turn() {
         if (can_attack(row, col)) {
             lock_guard<mutex> lock(engine.get_args()->m);
             engine.get_args()->computer_attack = make_pair(row, col);
+            player_grid[row][col].animation = true;
             // Miss
             if (player_grid[row][col].e == Entity::Sea) {
                 engine.get_player_grid().modify_grid(row, col, Entity::Missed);
             }
-                
             // Hit
             else {
                 player_grid[row][col].ship->inject_damage(row, col);
 
                 // Ship has been sunk
                 if (player_grid[row][col].ship->get_hp() == 0) {
+                    // Mark points for animation
+                    for (const pair<int, int>& p : player_grid[row][col].ship->get_points())
+                        player_grid[p.first][p.second].animation = true;
+
                     engine.get_player().sink_ship();
                     row_prev = -1;
                     col_prev = -1;
