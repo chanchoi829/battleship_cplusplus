@@ -143,7 +143,7 @@ void Display::draw_player_grid() {
             // Recently attacked spot blinks
             if (info->player_attack.first != -1 && blink && info->computer_attack.first == i - 'A' &&
                 info->computer_attack.second == j)
-                
+                tmp = ' ';
 
             // Ship blinks when it recently has been attacked
             for (int i = 0; info->player_attack.first != -1 && blink && ship && i < ship->get_length(); ++i) {
