@@ -33,7 +33,10 @@ bool Grid::is_valid(vector<int>& positions, int point, int direction, int ship_l
         int row = point / 10, col = point % 10;
 
         // Check if the point is in range and if the ship can fit
-        if (point < 0 || point > 99 || grid[row][col].e != Entity::Sea) {
+        if (point < 0 || point > 99 ||
+        	(point % 10 == 0 && direction == -1) ||
+        	(point % 10 == 9 && direction == 1) ||
+        	grid[row][col].e != Entity::Sea) {
             ship_fits = false;
             break;
         }
