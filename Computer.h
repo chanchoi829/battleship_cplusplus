@@ -1,6 +1,7 @@
 #ifndef COMPUTER_H
 #define COMPUTER_H
 
+#include "Ship.h"
 #include <string>
 
 class Computer {
@@ -9,7 +10,7 @@ public:
     // Simulate computer's turn
     void turn();
     // Place computer's ship
-    void place_ship(const std::string& ship);
+    void place_ship(Ship::Ship_type s);
     void sink_ship();
     int get_ships_alive();
 

@@ -29,18 +29,18 @@ Engine::Engine() {
 // Run the game
 void Engine::run() {
     // Create computer's grid
-    player.place_ship_random("Destroyer");
-    player.place_ship_random("Submarine");
-    player.place_ship_random("Cruiser");
-    player.place_ship_random("Battleship");
-    player.place_ship_random("Carrier");
+    player.place_ship_random(Ship::Ship_type::Destroyer);
+    player.place_ship_random(Ship::Ship_type::Submarine);
+    player.place_ship_random(Ship::Ship_type::Cruiser);
+    player.place_ship_random(Ship::Ship_type::Battleship);
+    player.place_ship_random(Ship::Ship_type::Carrier);
 
     // Create player's grid
-    computer.place_ship("Destroyer");
-    computer.place_ship("Submarine");
-    computer.place_ship("Cruiser");
-    computer.place_ship("Battleship");
-    computer.place_ship("Carrier");
+    computer.place_ship(Ship::Ship_type::Destroyer);
+    computer.place_ship(Ship::Ship_type::Submarine);
+    computer.place_ship(Ship::Ship_type::Cruiser);
+    computer.place_ship(Ship::Ship_type::Battleship);
+    computer.place_ship(Ship::Ship_type::Carrier);
 
     while (true) {
         // Player's turn

@@ -10,39 +10,49 @@ Ship::Ship() {
     recently_sunk = false;
 }
 
-Ship::Ship(const std::string& name_) {
-    if (name_ == "Destroyer") {
-        length = 2;
-        hp = 2;
-        letter = 'd';
-        hit = vector<bool>(2, false);
+Ship::Ship(Ship::Ship_type s) {
+    switch (s) {
+        case Ship_type::Unknown:
+            length = 0;
+            hp = 0;
+            letter = ' ';
+            name = "Unknown";
+        case Ship_type::Destroyer:
+            length = 2;
+            hp = 2;
+            letter = 'd';
+            hit = vector<bool>(2, false);
+            name = "Destroyer";
+            break;
+        case Ship_type::Submarine:
+            length = 3;
+            hp = 3;
+            letter = 's';
+            hit = vector<bool>(3, false);
+            name = "Submarine";
+            break;
+        case Ship_type::Cruiser:
+            length = 3;
+            hp = 3;
+            letter = 'c';
+            hit = vector<bool>(3, false);
+            name = "Cruiser";
+            break;
+        case Ship_type::Battleship:
+            length = 4;
+            hp = 4;
+            letter = 'b';
+            hit = vector<bool>(4, false);
+            name = "Battleship";
+            break;
+        case Ship_type::Carrier:
+            length = 5;
+            hp = 5;
+            letter = 'C';
+            hit = vector<bool>(5, false);
+            name = "Carrier";
+            break;
     }
-    else if (name_ == "Submarine"){
-        length = 3;
-        hp = 3;
-        letter = 's';
-        hit = vector<bool>(3, false);
-    }
-    else if (name_ == "Cruiser") {
-        length = 3;
-        hp = 3;
-        letter = 'c';
-        hit = vector<bool>(3, false);
-    }
-    else if (name_ == "Battleship") {
-        length = 4;
-        hp = 4;
-        letter = 'b';
-        hit = vector<bool>(4, false);
-    }
-    else {
-        length = 5;
-        hp = 5;
-        letter = 'C';
-        hit = vector<bool>(5, false);
-    }
-
-    name = name_;
 }
 
 void Ship::inject_damage(int row, int col) {

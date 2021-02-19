@@ -100,8 +100,8 @@ void Computer::turn() {
 }
 
 // Place a ship on the computer's grid
-void Computer::place_ship(const string& ship) {
-    shared_ptr<Ship> new_ship = make_shared<Ship>(ship);
+void Computer::place_ship(Ship::Ship_type s) {
+    shared_ptr<Ship> new_ship = make_shared<Ship>(s);
 
     // Direction: left, up, right, down
     vector<int> points, directions = { -1, -10, 1, 10 };;

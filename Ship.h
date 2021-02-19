@@ -7,8 +7,17 @@
 
 class Ship {
 public:
+	enum class Ship_type {
+		Unknown,
+		Destroyer,
+		Submarine,
+		Cruiser,
+		Battleship,
+		Carrier,
+	};
+
 	Ship();
-	Ship(const std::string& name_);
+	Ship(Ship::Ship_type s);
 
 	void inject_damage(int row, int col);
 	void get_status();

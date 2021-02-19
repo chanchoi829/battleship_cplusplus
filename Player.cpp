@@ -58,8 +58,8 @@ void Player::turn() {
 }
 
 
-void Player::place_ship_random(const std::string& ship) {
-    shared_ptr<Ship> new_ship = make_shared<Ship>(ship);
+void Player::place_ship_random(Ship::Ship_type s) {
+    shared_ptr<Ship> new_ship = make_shared<Ship>(s);
 
     // Direction: left, up, right, down
     vector<int> points, directions = { -1, -10, 1, 10 };;
