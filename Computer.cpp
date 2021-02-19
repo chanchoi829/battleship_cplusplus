@@ -63,8 +63,8 @@ void Computer::turn() {
 
         // Attack a point that has not been attacked
         if (can_attack(row, col)) {
-            lock_guard<mutex> lock(engine.get_args()->m);
-            engine.get_args()->computer_attack = make_pair(row, col);
+            lock_guard<mutex> lock(engine.get_info()->m);
+            engine.get_info()->computer_attack = make_pair(row, col);
             player_grid[row][col].animation = true;
             // Miss
             if (player_grid[row][col].e == Entity::Sea) {
@@ -108,7 +108,10 @@ void Computer::place_ship(const string& ship) {
     vector<int> points, directions = { -1, -10, 1, 10 };;
 
     // Generate random positions until the ship fits
-    while (!is_valid(engine.get_computer_grid().get_grid(), points, rand() % 100, directions[rand() % 4], new_ship->get_hp())) {}
+    while (!engine.get_computer_grid().is_valid(points, rand() % 100,
+        directions[rand() % 4], new_ship->get_hp()))
+    {
+    }
 
     vector<pair<int, int>> converted;
     // Place the ship

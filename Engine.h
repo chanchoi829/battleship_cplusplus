@@ -9,15 +9,17 @@ Engine class
 #include "Display.h"
 #include "Grid.h"
 #include "Player.h"
+#include "Ship.h"
+#include "Utility.h"
 #include <string>
 #include <utility>
 #include <vector>
 #include <thread>
 #include <memory>
 
-
-struct Arguments;
-class Ship;
+#define engine Engine::get_instance()
+#define info Engine::get_instance().get_info()
+#define computer_grid engine.get_computer_grid().get_grid()
 
 class Engine {
 
@@ -31,20 +33,13 @@ public:
     static Engine& get_instance();
 
     // Getters
-    std::vector<std::shared_ptr<Ship>>& get_computer_ships()
-    {return computer_ships;}
-    std::vector<std::shared_ptr<Ship>>& get_player_ships()
-    {return player_ships;}
-    Grid& get_computer_grid()
-    {return computer_grid;}
-    Grid& get_player_grid()
-    {return player_grid;}
-    Computer& get_computer() 
-    {return computer;}
-    Player& get_player()
-    {return player;}
-    std::shared_ptr<Arguments> get_args()
-    {return args;}
+    std::vector<std::shared_ptr<Ship>>& get_computer_ships();
+    std::vector<std::shared_ptr<Ship>>& get_player_ships();
+    Grid& get_computer_grid();
+    Grid& get_player_grid();
+    Computer& get_computer();
+    Player& get_player();
+    std::shared_ptr<Information> get_info();
 
     // Disallow copy/move construction or assignment
     Engine(Engine& obj) = delete;
@@ -57,12 +52,12 @@ private:
     Engine();
     ~Engine(){}
 
-    Grid computer_grid, player_grid;
+    Grid computer_grid_, player_grid_;
     Computer computer;
     Player player;
     Display display;
 
-    std::shared_ptr<Arguments> args;
+    std::shared_ptr<Information> information;
     std::thread display_thread;
 
     std::vector<std::shared_ptr<Ship>> computer_ships, player_ships;

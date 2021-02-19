@@ -16,16 +16,11 @@ public:
 	bool is_hit(int row, int prev);
 	void reset_recently_sunk();
 
-	int get_letter()
-	{return letter;}
-	int get_hp()
-	{return hp;}
-	int get_length()
-	{return length;}
-	bool get_recently_sunk()
-	{return recently_sunk;}
-	std::vector<std::pair<int, int>> get_points()
-	{return points;}
+	int get_letter();
+	int get_hp();
+	int get_length();
+	bool get_recently_sunk();
+	std::vector<std::pair<int, int>>& get_points();
 
 private:
 	std::vector<std::pair<int, int>> points;

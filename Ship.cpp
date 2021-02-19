@@ -75,3 +75,24 @@ bool Ship::is_hit(int row, int col) {
 void Ship::reset_recently_sunk() {
     recently_sunk = false;
 }
+
+// Getters
+int Ship::get_letter() {
+    return letter;
+}
+
+int Ship::get_hp() {
+    return letter;
+}
+
+int Ship::get_length() {
+    return letter;
+}
+
+bool Ship::get_recently_sunk() {
+    return recently_sunk;
+}
+
+vector<pair<int, int>>& Ship::get_points() {
+    return points;
+}

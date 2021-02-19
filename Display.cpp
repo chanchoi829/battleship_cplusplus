@@ -13,7 +13,6 @@
 
 using namespace std;
 
-#define args engine.get_args()
 
 Display::Display() {
     blink = false;
@@ -23,9 +22,9 @@ Display::Display() {
 
 void Display::draw() {
     initscr();
-    while (!args->computer_wins && !args->player_wins) {
+    while (!info->computer_wins && !info->player_wins) {
         {
-            lock_guard<mutex> lock_d(args->m);
+            lock_guard<mutex> lock_d(info->m);
 
             wmove(stdscr, 0, 0);
 
@@ -42,14 +41,14 @@ void Display::draw() {
 
             wrefresh(stdscr);
 
-            if (args->recently_attacked)
+            if (info->recently_attacked)
                 blink_control(15, 60);
         }
         this_thread::sleep_for(chrono::milliseconds(30));
     }
     endwin();
 
-    if (args->computer_wins)
+    if (info->computer_wins)
         cout << "You Lose";
     else
         cout << "You win";
@@ -93,11 +92,11 @@ void Display::draw_computer_grid() {
             }
 
             // Recently attacked spot blinks
-            if (args->computer_attack.first != -1 && blink && args->player_attack.first == i - 'A' &&
-                args->player_attack.second == j)
+            if (info->computer_attack.first != -1 && blink && info->player_attack.first == i - 'A' &&
+                info->player_attack.second == j)
                 tmp = ' ';
 
-            if (args->computer_attack.first != -1 && blink && ship && ship->get_recently_sunk())
+            if (info->computer_attack.first != -1 && blink && ship && ship->get_recently_sunk())
                 tmp = ' ';
 
             wprintw(stdscr, "%c ", tmp);
@@ -144,13 +143,13 @@ void Display::draw_player_grid() {
             }
 
             // Recently attacked spot blinks
-            if (args->player_attack.first != -1 && blink && args->computer_attack.first == i - 'A' &&
-                args->computer_attack.second == j)
+            if (info->player_attack.first != -1 && blink && info->computer_attack.first == i - 'A' &&
+                info->computer_attack.second == j)
                 
 
             // Ship blinks when it recently has been attacked
-            for (int i = 0; args->player_attack.first != -1 && blink && ship && i < ship->get_length(); ++i) {
-                if (ship->get_points()[i].first == args->computer_attack.first && ship->get_points()[i].second == args->computer_attack.second) {
+            for (int i = 0; info->player_attack.first != -1 && blink && ship && i < ship->get_length(); ++i) {
+                if (ship->get_points()[i].first == info->computer_attack.first && ship->get_points()[i].second == info->computer_attack.second) {
                     tmp = ' ';
                     break;
                 }
@@ -168,7 +167,7 @@ void Display::blink_control(int freq, int limit) {
         counter = 0;
         temp_counter = 0;
         blink = false;
-        args->recently_attacked = false;
+        info->recently_attacked = false;
     }
     else {
         if (temp_counter < freq) {

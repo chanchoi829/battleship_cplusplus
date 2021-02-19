@@ -16,8 +16,7 @@ public:
     // Get user's input and check if it is valid
     void read_point(std::string& point);
 
-    int get_ships_alive()
-    {return ships_alive;}
+    int get_ships_alive();
 
 private:
     int ships_alive;

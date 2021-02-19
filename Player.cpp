@@ -7,8 +7,6 @@
 
 using namespace std;
 
-#define computer_grid engine.get_computer_grid().get_grid()
-
 Player::Player() {
     ships_alive = 5;
 }
@@ -32,9 +30,9 @@ void Player::turn() {
             computer_grid[row][col].ship->is_hit(row, col)))
             continue;
 
-        lock_guard<mutex> lock(engine.get_args()->m);
-        engine.get_args()->recently_attacked = true;
-        engine.get_args()->player_attack = make_pair(row, col);
+        lock_guard<mutex> lock(engine.get_info()->m);
+        engine.get_info()->recently_attacked = true;
+        engine.get_info()->player_attack = make_pair(row, col);
 
         // Miss
         if (computer_grid[row][col].e == Entity::Sea) {
@@ -68,7 +66,10 @@ void Player::place_ship_random(const std::string& ship) {
     vector<int> points, directions = { -1, -10, 1, 10 };;
 
     // Generate random positions until the ship fits
-    while (!is_valid(engine.get_player_grid().get_grid(), points, rand() % 100, directions[rand() % 4], new_ship->get_hp())) {}
+    while (!engine.get_player_grid().is_valid(points, rand() % 100,
+        directions[rand() % 4], new_ship->get_hp()))
+    {
+    }
 
     vector<pair<int, int>> converted;
     // Place the ship
@@ -107,4 +108,8 @@ void Player::read_point(std::string& point) {
 
         break;
     }
+}
+
+int Player::get_ships_alive() {
+    return ships_alive;
 }
