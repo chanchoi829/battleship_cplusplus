@@ -67,11 +67,16 @@ void Display::draw_computer_grid() {
         wprintw(stdscr, "%c ", i);
 
         for (int j = 0; j < 10; ++j) {
-            Grid::Entity e = engine.get_computer_grid().get_grid()[i - 'A'][j].e;
-            shared_ptr<Ship> ship = engine.get_computer_grid().get_grid()[i - 'A'][j].ship;
+            Grid::Entity e =
+                engine.get_computer_grid().get_grid()[i - 'A'][j].e;
+            shared_ptr<Ship> ship =
+                engine.get_computer_grid().get_grid()[i - 'A'][j].ship;
             char tmp;
             // Do not show ships' locations to the player
             switch (e) {
+                case Grid::Entity::Unknown:
+                    tmp = '?';
+                    break;
                 case Grid::Entity::Missed:
                     tmp = 'o';
                     break;
@@ -84,18 +89,28 @@ void Display::draw_computer_grid() {
                     else
                         tmp = '.';
                     break;
-                case Grid::Entity::Null:
-                    tmp = '?';
-                    break;
             }
 
             // Recently attacked spot blinks
-            if (info->computer_attack.first != -1 && blink && info->player_attack.first == i - 'A' &&
-                info->player_attack.second == j)
+            if (
+                blink &&
+                info->computer_attack.first != -1 &&
+                info->player_attack.first == i - 'A' &&
+                info->player_attack.second == j
+                )
+            {
                 tmp = ' ';
+            }    
 
-            if (info->computer_attack.first != -1 && blink && ship && ship->get_recently_sunk())
+            if (
+                info->computer_attack.first != -1 &&
+                blink &&
+                ship &&
+                ship->get_recently_sunk()
+                )
+            {
                 tmp = ' ';
+            }
 
             wprintw(stdscr, "%c ", tmp);
         }
@@ -119,12 +134,17 @@ void Display::draw_player_grid() {
         wprintw(stdscr, "%c ", i);
 
         for (int j = 0; j < 10; ++j) {
-            Grid::Entity e = engine.get_player_grid().get_grid()[i - 'A'][j].e;
-            shared_ptr<Ship> ship = engine.get_player_grid().get_grid()[i - 'A'][j].ship;
+            Grid::Entity e =
+                engine.get_player_grid().get_grid()[i - 'A'][j].e;
+            shared_ptr<Ship> ship =
+                engine.get_player_grid().get_grid()[i - 'A'][j].ship;
 
             char tmp;
             switch (e) {
                 // Don't show computer's missed attacks
+                case Grid::Entity::Unknown:
+                    tmp = '?';
+                    break;
                 case Grid::Entity::Missed:
                 case Grid::Entity::Sea:
                     tmp = '.';
@@ -135,19 +155,29 @@ void Display::draw_player_grid() {
                     else
                         tmp = ship->get_letter();
                     break;
-                case Grid::Entity::Null:
-                    tmp = '?';
-                    break;
             }
 
             // Recently attacked spot blinks
-            if (info->player_attack.first != -1 && blink && info->computer_attack.first == i - 'A' &&
-                info->computer_attack.second == j)
+            if (
+                blink &&
+                info->player_attack.first != -1 &&
+                info->computer_attack.first == i - 'A' &&
+                info->computer_attack.second == j
+                )
+            {
                 tmp = ' ';
+            }
 
             // Ship blinks when it recently has been attacked
-            for (int i = 0; info->player_attack.first != -1 && blink && ship && i < ship->get_length(); ++i) {
-                if (ship->get_points()[i].first == info->computer_attack.first && ship->get_points()[i].second == info->computer_attack.second) {
+            for (int i = 0; info->player_attack.first != -1 &&
+                blink && ship &&
+                i < ship->get_length(); ++i) {
+                if (
+                    ship->get_points()[i].first ==
+                    info->computer_attack.first &&
+                    ship->get_points()[i].second ==
+                    info->computer_attack.second
+                ) {
                     tmp = ' ';
                     break;
                 }

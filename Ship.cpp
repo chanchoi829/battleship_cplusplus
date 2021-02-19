@@ -55,6 +55,7 @@ Ship::Ship(Ship::Ship_type s) {
     }
 }
 
+// Inject damage to this ship
 void Ship::inject_damage(int row, int col) {
     --hp;
 
@@ -65,6 +66,7 @@ void Ship::inject_damage(int row, int col) {
     hit[offset] = true;
 }
 
+// Get this ship's status
 void Ship::get_status() {
     wprintw(stdscr, "Computer's %s (length %d):", name.c_str(), length);
     if (hp == 0)
@@ -73,15 +75,18 @@ void Ship::get_status() {
         wprintw(stdscr, " afloat\n");
 }
 
+// Assign points to this ship
 void Ship::assign_points(vector<pair<int, int>>& points_) {
     points = move(points_);
 }
 
+// Check if the point is hit
 bool Ship::is_hit(int row, int col) {
     int offset = abs(row - points[0].first) + abs(col - points[0].second);
     return hit[offset];
 }
 
+// Reset recently_sunk variable
 void Ship::reset_recently_sunk() {
     recently_sunk = false;
 }

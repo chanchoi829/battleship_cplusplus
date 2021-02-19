@@ -19,12 +19,18 @@ public:
 	Ship();
 	Ship(Ship::Ship_type s);
 
+	// Inject damage to this ship
 	void inject_damage(int row, int col);
+	// Get this ship's status
 	void get_status();
+	// Assign points to this ship
 	void assign_points(std::vector<std::pair<int, int>>& points);
+	// Check if the point is hit
 	bool is_hit(int row, int prev);
+	// Reset recently_sunk variable
 	void reset_recently_sunk();
 
+	// Getters
 	int get_letter();
 	int get_hp();
 	int get_length();

@@ -8,6 +8,7 @@ Grid::Grid() {
     grid = vector<vector<Grid::Cell>> (10, vector<Grid::Cell>(10, Cell()));
 }
 
+// Place a ship in the given grid
 void Grid::place_ship(const vector<pair<int, int>>& points, shared_ptr<Ship> ship) {
     for (const pair<int, int>& point : points) {
         grid[point.first][point.second].e = Entity::Vessel;
@@ -15,6 +16,7 @@ void Grid::place_ship(const vector<pair<int, int>>& points, shared_ptr<Ship> shi
     }
 }
 
+// Modify the given point
 void Grid::modify_grid(int row, int col, Entity e) {
     if (e == Entity::Missed)
         grid[row][col].e = Entity::Missed;
@@ -43,6 +45,7 @@ bool Grid::is_valid(vector<int>& positions, int point, int direction, int ship_l
     return ship_fits;
 }
 
+// Getters
 vector<vector<Grid::Cell>>& Grid:: get_grid() {
     return grid;
 }
