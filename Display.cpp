@@ -2,9 +2,7 @@
 #include "Engine.h"
 #include "Grid.h"
 #include "Ship.h"
-#include "Utility.h"
 #include <chrono>
-#include <coroutine>
 #include <iostream>
 #include <memory>
 #include <mutex>
@@ -69,24 +67,24 @@ void Display::draw_computer_grid() {
         wprintw(stdscr, "%c ", i);
 
         for (int j = 0; j < 10; ++j) {
-            Entity e = engine.get_computer_grid().get_grid()[i - 'A'][j].e;
+            Grid::Entity e = engine.get_computer_grid().get_grid()[i - 'A'][j].e;
             shared_ptr<Ship> ship = engine.get_computer_grid().get_grid()[i - 'A'][j].ship;
             char tmp;
             // Do not show ships' locations to the player
             switch (e) {
-                case Entity::Missed:
+                case Grid::Entity::Missed:
                     tmp = 'o';
                     break;
-                case Entity::Sea:
+                case Grid::Entity::Sea:
                     tmp = '.';
                     break;
-                case Entity::Vessel:
+                case Grid::Entity::Vessel:
                     if (ship->is_hit(i - 'A', j))
                         tmp = 'x';
                     else
                         tmp = '.';
                     break;
-                case Entity::Null:
+                case Grid::Entity::Null:
                     tmp = '?';
                     break;
             }
@@ -121,23 +119,23 @@ void Display::draw_player_grid() {
         wprintw(stdscr, "%c ", i);
 
         for (int j = 0; j < 10; ++j) {
-            Entity e = engine.get_player_grid().get_grid()[i - 'A'][j].e;
+            Grid::Entity e = engine.get_player_grid().get_grid()[i - 'A'][j].e;
             shared_ptr<Ship> ship = engine.get_player_grid().get_grid()[i - 'A'][j].ship;
 
             char tmp;
             switch (e) {
                 // Don't show computer's missed attacks
-                case Entity::Missed:
-                case Entity::Sea:
+                case Grid::Entity::Missed:
+                case Grid::Entity::Sea:
                     tmp = '.';
                     break;
-                case Entity::Vessel:
+                case Grid::Entity::Vessel:
                     if (ship->is_hit(i - 'A', j))
                         tmp = 'x';
                     else
                         tmp = ship->get_letter();
                     break;
-                case Entity::Null:
+                case Grid::Entity::Null:
                     tmp = '?';
                     break;
             }

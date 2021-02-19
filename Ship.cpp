@@ -82,11 +82,11 @@ int Ship::get_letter() {
 }
 
 int Ship::get_hp() {
-    return letter;
+    return hp;
 }
 
 int Ship::get_length() {
-    return letter;
+    return length;
 }
 
 bool Ship::get_recently_sunk() {

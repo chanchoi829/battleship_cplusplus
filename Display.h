@@ -1,8 +1,6 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include <coroutine>
-
 class Display {
 public:
     Display();

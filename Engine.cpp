@@ -4,7 +4,6 @@
 #include "Grid.h"
 #include "Player.h"
 #include "Ship.h"
-#include "Utility.h"
 #include <algorithm>
 
 using namespace std;
@@ -102,6 +101,6 @@ Computer& Engine::get_computer() {
 Player& Engine::get_player() {
     return player;
 }
-shared_ptr<Information> Engine::get_info() {
+shared_ptr<Engine::Information> Engine::get_info() {
     return information;
 }

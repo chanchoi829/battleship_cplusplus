@@ -1,12 +1,11 @@
 #include "Grid.h"
 #include "Ship.h"
-#include "Utility.h"
 #include <mutex>
 
 using namespace std;
 
 Grid::Grid() {
-    grid = vector<vector<Cell>> (10, vector<Cell>(10, Cell()));
+    grid = vector<vector<Grid::Cell>> (10, vector<Grid::Cell>(10, Cell()));
 }
 
 void Grid::place_ship(const vector<pair<int, int>>& points, shared_ptr<Ship> ship) {
@@ -32,8 +31,7 @@ bool Grid::is_valid(vector<int>& positions, int point, int direction, int ship_l
         int row = point / 10, col = point % 10;
 
         // Check if the point is in range and if the ship can fit
-        if (point < 0 || point > 99 || (point % 10 == 0 && direction == -1) || (point % 10 == 9 && direction == 1)
-            || grid[row][col].e != Entity::Sea) {
+        if (point < 0 || point > 99 || grid[row][col].e != Entity::Sea) {
             ship_fits = false;
             break;
         }
@@ -45,6 +43,6 @@ bool Grid::is_valid(vector<int>& positions, int point, int direction, int ship_l
     return ship_fits;
 }
 
-vector<vector<Cell>>& Grid:: get_grid() {
+vector<vector<Grid::Cell>>& Grid:: get_grid() {
     return grid;
 }

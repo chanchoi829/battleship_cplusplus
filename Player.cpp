@@ -1,7 +1,6 @@
 #include "Player.h"
 #include "Engine.h"
 #include "Ship.h"
-#include "Utility.h"
 #include <algorithm>
 #include <iostream>
 
@@ -25,8 +24,8 @@ void Player::turn() {
         int row = point[0] - 'a', col = point.length() == 3 ? 9 : point[1] - '1';
 
         // Check if the point has been attacked already
-        if (computer_grid[row][col].e == Entity::Missed ||
-            (computer_grid[row][col].e == Entity::Vessel &&
+        if (computer_grid[row][col].e == Grid::Entity::Missed ||
+            (computer_grid[row][col].e == Grid::Entity::Vessel &&
             computer_grid[row][col].ship->is_hit(row, col)))
             continue;
 
@@ -35,8 +34,8 @@ void Player::turn() {
         engine.get_info()->player_attack = make_pair(row, col);
 
         // Miss
-        if (computer_grid[row][col].e == Entity::Sea) {
-            engine.get_computer_grid().modify_grid(row, col, Entity::Missed);
+        if (computer_grid[row][col].e == Grid::Entity::Sea) {
+            engine.get_computer_grid().modify_grid(row, col, Grid::Entity::Missed);
             return;
         }
 
@@ -48,7 +47,7 @@ void Player::turn() {
             engine.get_computer().sink_ship();
 
         // Mark the point
-        engine.get_computer_grid().modify_grid(row, col, Entity::Vessel);
+        engine.get_computer_grid().modify_grid(row, col, Grid::Entity::Vessel);
 
         // Mark points for animation
         for (const pair<int, int>& p : computer_grid[row][col].ship->get_points())

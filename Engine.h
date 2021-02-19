@@ -10,12 +10,12 @@ Engine class
 #include "Grid.h"
 #include "Player.h"
 #include "Ship.h"
-#include "Utility.h"
 #include <string>
 #include <utility>
 #include <vector>
 #include <thread>
 #include <memory>
+#include <mutex>
 
 #define engine Engine::get_instance()
 #define info Engine::get_instance().get_info()
@@ -24,6 +24,12 @@ Engine class
 class Engine {
 
 public:
+    struct Information {
+        std::mutex m;
+        std::pair<int, int> computer_attack, player_attack;
+        bool computer_wins, player_wins, recently_attacked;
+    };
+
     void run();
     // Reset grids
     void push_computer_ship(std::shared_ptr<Ship> ship);
@@ -39,7 +45,7 @@ public:
     Grid& get_player_grid();
     Computer& get_computer();
     Player& get_player();
-    std::shared_ptr<Information> get_info();
+    std::shared_ptr<Engine::Information> get_info();
 
     // Disallow copy/move construction or assignment
     Engine(Engine& obj) = delete;

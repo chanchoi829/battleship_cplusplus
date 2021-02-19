@@ -1,14 +1,13 @@
 #include "Computer.h"
 #include "Engine.h"
 #include "Ship.h"
-#include "Utility.h"
 #include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
 
 #define player_grid Engine::get_instance().get_player_grid().get_grid()
-#define can_attack(r, c) (player_grid[r][c].e == Entity::Sea || (player_grid[r][c].e == Entity::Vessel && !player_grid[r][c].ship->is_hit(r, c)))
+#define can_attack(r, c) (player_grid[r][c].e == Grid::Entity::Sea || (player_grid[r][c].e == Grid::Entity::Vessel && !player_grid[r][c].ship->is_hit(r, c)))
 
 using namespace std;
 
@@ -67,8 +66,8 @@ void Computer::turn() {
             engine.get_info()->computer_attack = make_pair(row, col);
             player_grid[row][col].animation = true;
             // Miss
-            if (player_grid[row][col].e == Entity::Sea) {
-                engine.get_player_grid().modify_grid(row, col, Entity::Missed);
+            if (player_grid[row][col].e == Grid::Entity::Sea) {
+                engine.get_player_grid().modify_grid(row, col, Grid::Entity::Missed);
             }
             // Hit
             else {
@@ -92,7 +91,7 @@ void Computer::turn() {
                 }
 
                 // Mark the grid
-                engine.get_player_grid().modify_grid(row, col, Entity::Vessel);
+                engine.get_player_grid().modify_grid(row, col, Grid::Entity::Vessel);
             }
 
             return;
@@ -126,4 +125,8 @@ void Computer::place_ship(const string& ship) {
 
 void Computer::sink_ship() {
     --ships_alive;
+}
+
+int Computer::get_ships_alive() {
+    return ships_alive;
 }
