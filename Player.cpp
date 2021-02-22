@@ -16,7 +16,6 @@ void Player::turn() {
     for (const shared_ptr<Ship>& p : engine.get_computer_ships())
         p->reset_recently_sunk();
 
-    //lock_guard<mutex> lock2(engine.get_info()->m);
     MEVENT event;
     int row, col;
     
@@ -25,11 +24,8 @@ void Player::turn() {
         if (wgetch(stdscr) == KEY_MOUSE && getmouse(&event) == OK)
         {
             // Convert mouse position to row and column
-            row = event.x;
-            col = event.y;
-
-            wprintw(stdscr, "%d\n", row);
-            wprintw(stdscr, "%d\n", col);
+            row = event.y - 4;
+            col = (event.x - 2) / 2;
         }
         else {
             continue;
@@ -50,6 +46,8 @@ void Player::turn() {
         }   
     }
 
+
+    lock_guard<mutex> lock2(engine.get_info()->m);
     engine.get_info()->recently_attacked = true;
     engine.get_info()->player_attack = make_pair(row, col);
 
