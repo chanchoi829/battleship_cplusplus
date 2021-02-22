@@ -28,8 +28,6 @@ Engine::Engine() {
     mousemask(ALL_MOUSE_EVENTS | BUTTON1_CLICKED, NULL);
     mouseinterval(0);
     keypad(stdscr, TRUE);
-    cbreak();
-    noecho();
     display_thread = thread(&Display::draw, display);
 }
 

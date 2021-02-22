@@ -19,6 +19,11 @@ Display::Display() {
 }
 
 void Display::draw() {
+    initscr();
+    mousemask(ALL_MOUSE_EVENTS | BUTTON1_CLICKED, NULL);
+    mouseinterval(0);
+    keypad(stdscr, TRUE);
+
     while (!info->computer_wins && !info->player_wins) {
         {
             wmove(stdscr, 0, 0);
