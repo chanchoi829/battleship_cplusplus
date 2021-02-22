@@ -22,20 +22,17 @@ void Player::turn() {
     
     while (true) {
         // Check if it's a double click
-
-        int c = wgetch(stdscr);
-        if (
-            c != KEY_MOUSE ||
-            getmouse(&event) != OK ||
-            !(event.bstate & BUTTON1_DOUBLE_CLICKED)
-        )
+        if (wgetch(stdscr) == KEY_MOUSE && getmouse(&event) == OK)
         {
-            continue;
-        }
-        else {
             // Convert mouse position to row and column
             row = event.x;
             col = event.y;
+
+            wprintw(stdscr, "%d\n", row);
+            wprintw(stdscr, "%d\n", col);
+        }
+        else {
+            continue;
         }
 
         // Check if row or column is out of range

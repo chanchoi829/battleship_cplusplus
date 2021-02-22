@@ -25,7 +25,7 @@ Engine::Engine() {
     display = Display();
 
     initscr();
-    mousemask(ALL_MOUSE_EVENTS | BUTTON1_DOUBLE_CLICKED, NULL);
+    mousemask(ALL_MOUSE_EVENTS | BUTTON1_CLICKED, NULL);
     mouseinterval(0);
     keypad(stdscr, TRUE);
     cbreak();
