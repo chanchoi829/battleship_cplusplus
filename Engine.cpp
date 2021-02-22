@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Ship.h"
 #include <algorithm>
+#include <ncurses.h>
 
 using namespace std;
 
@@ -23,6 +24,12 @@ Engine::Engine() {
     player = Player();
     display = Display();
 
+    initscr();
+    mousemask(ALL_MOUSE_EVENTS | BUTTON1_DOUBLE_CLICKED, NULL);
+    mouseinterval(0);
+    keypad(stdscr, TRUE);
+    cbreak();
+    noecho();
     display_thread = thread(&Display::draw, display);
 }
 
@@ -59,7 +66,6 @@ void Engine::run() {
     }
 
     display_thread.join();
-    return;
 }
 
 void Engine::push_computer_ship(shared_ptr<Ship> ship) {

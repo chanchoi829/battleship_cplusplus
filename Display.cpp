@@ -19,11 +19,8 @@ Display::Display() {
 }
 
 void Display::draw() {
-    initscr();
     while (!info->computer_wins && !info->player_wins) {
         {
-            lock_guard<mutex> lock_d(info->m);
-
             wmove(stdscr, 0, 0);
 
             draw_computer_grid();

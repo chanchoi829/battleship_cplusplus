@@ -3,6 +3,7 @@
 #include "Ship.h"
 #include <algorithm>
 #include <iostream>
+#include <ncurses.h>
 
 using namespace std;
 
@@ -12,49 +13,68 @@ Player::Player() {
 
 // Simulate player's turn
 void Player::turn() {
+    for (const shared_ptr<Ship>& p : engine.get_computer_ships())
+        p->reset_recently_sunk();
+
+    //lock_guard<mutex> lock2(engine.get_info()->m);
+    MEVENT event;
+    int row, col;
+    
     while (true) {
-        // Read in a point
-        string point;
-        read_point(point);
+        // Check if it's a double click
 
-        for (const shared_ptr<Ship>& p : engine.get_computer_ships())
-            p->reset_recently_sunk();
-
-        // Convert to row and col
-        int row = point[0] - 'a', col = point.length() == 3 ? 9 : point[1] - '1';
-
-        // Check if the point has been attacked already
-        if (computer_grid[row][col].e == Grid::Entity::Missed ||
-            (computer_grid[row][col].e == Grid::Entity::Vessel &&
-            computer_grid[row][col].ship->is_hit(row, col)))
+        int c = wgetch(stdscr);
+        if (
+            c != KEY_MOUSE ||
+            getmouse(&event) != OK ||
+            !(event.bstate & BUTTON1_DOUBLE_CLICKED)
+        )
+        {
             continue;
-
-        lock_guard<mutex> lock(engine.get_info()->m);
-        engine.get_info()->recently_attacked = true;
-        engine.get_info()->player_attack = make_pair(row, col);
-
-        // Miss
-        if (computer_grid[row][col].e == Grid::Entity::Sea) {
-            engine.get_computer_grid().modify_grid(row, col, Grid::Entity::Missed);
-            return;
+        }
+        else {
+            // Convert mouse position to row and column
+            row = event.x;
+            col = event.y;
         }
 
-        // Increment the ship's damage taken
-        computer_grid[row][col].ship->inject_damage(row, col);
+        // Check if row or column is out of range
+        if (row < 0 || row > 9 || col < 0 || col > 9) {
+            continue;
+        }
+        // Check if the point has been attacked already
+        else if (computer_grid[row][col].e == Grid::Entity::Missed ||
+            (computer_grid[row][col].e == Grid::Entity::Vessel &&
+                computer_grid[row][col].ship->is_hit(row, col))) {
+            continue;
+        }
+        else {
+            break;
+        }   
+    }
 
-        // When hp is 0, the ship sinks
-        if (computer_grid[row][col].ship->get_hp() == 0)
-            engine.get_computer().sink_ship();
+    engine.get_info()->recently_attacked = true;
+    engine.get_info()->player_attack = make_pair(row, col);
 
-        // Mark the point
-        engine.get_computer_grid().modify_grid(row, col, Grid::Entity::Vessel);
-
-        // Mark points for animation
-        for (const pair<int, int>& p : computer_grid[row][col].ship->get_points())
-            computer_grid[p.first][p.second].animation = true;
-
+    // Miss
+    if (computer_grid[row][col].e == Grid::Entity::Sea) {
+        engine.get_computer_grid().modify_grid(row, col, Grid::Entity::Missed);
         return;
     }
+
+    // Increment the ship's damage taken
+    computer_grid[row][col].ship->inject_damage(row, col);
+
+    // When hp is 0, the ship sinks
+    if (computer_grid[row][col].ship->get_hp() == 0)
+        engine.get_computer().sink_ship();
+
+    // Mark the point
+    engine.get_computer_grid().modify_grid(row, col, Grid::Entity::Vessel);
+
+    // Mark points for animation
+    for (const pair<int, int>& p : computer_grid[row][col].ship->get_points())
+        computer_grid[p.first][p.second].animation = true;
 }
 
 
