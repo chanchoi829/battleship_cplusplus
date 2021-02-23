@@ -23,6 +23,8 @@ void Display::draw() {
     mouseinterval(0);
     keypad(stdscr, TRUE);
 
+    //animation_thread = thread(&Display::animate_computer_attacks, this);
+
     while (!info->computer_wins && !info->player_wins) {
         {
             wmove(stdscr, 0, 0);
@@ -39,21 +41,20 @@ void Display::draw() {
             engine.get_computer_ships()[4]->get_status();
 
             wrefresh(stdscr);
-
-            if (info->recently_attacked)
-                blink_control(15, 60);
         }
         this_thread::sleep_for(chrono::milliseconds(30));
     }
     endwin();
 
-    if (info->computer_wins)
+    if (info->computer_wins) {
         cout << "You Lose";
-    else
+    }
+    else {
         cout << "You win";
+    }
 }
 
-auto Display::switch_to_new_thread(thread& out) {
+/*auto Display::switch_to_new_thread(thread& out) {
     struct awaitable {
         thread* p_out;
         bool await_ready() { return false; }
@@ -62,12 +63,18 @@ auto Display::switch_to_new_thread(thread& out) {
             if (out.joinable())
                 throw std::runtime_error("Output jthread parameter not empty");
             out = thread([h] { h.resume(); });
+
+            for (const pair<int, int>& point : info->computer_attack.front()) {
+                mvwprintw(stdscr, point.second * 2 + 2, point.first + 18, " ");
+            }
+
+            info->computer_attack.pop();
         }
         void await_resume() {}
     };
 
     return awaitable{&out};
-}
+}*/
 
 // Draw computer's grid
 void Display::draw_computer_grid() {
@@ -106,27 +113,6 @@ void Display::draw_computer_grid() {
                     else
                         tmp = '.';
                     break;
-            }
-
-            // Recently attacked spot blinks
-            if (
-                blink &&
-                info->computer_attack.first != -1 &&
-                info->player_attack.first == i - 'A' &&
-                info->player_attack.second == j
-                )
-            {
-                tmp = ' ';
-            }    
-
-            if (
-                info->computer_attack.first != -1 &&
-                blink &&
-                ship &&
-                ship->get_recently_sunk()
-                )
-            {
-                tmp = ' ';
             }
 
             mvwprintw(stdscr, i - 'A' + 4, j + j + 2, "%c", tmp);
@@ -174,32 +160,6 @@ void Display::draw_player_grid() {
                     break;
             }
 
-            // Recently attacked spot blinks
-            if (
-                blink &&
-                info->player_attack.first != -1 &&
-                info->computer_attack.first == i - 'A' &&
-                info->computer_attack.second == j
-                )
-            {
-                tmp = ' ';
-            }
-
-            // Ship blinks when it recently has been attacked
-            for (int i = 0; info->player_attack.first != -1 &&
-                blink && ship &&
-                i < ship->get_length(); ++i) {
-                if (
-                    ship->get_points()[i].first ==
-                    info->computer_attack.first &&
-                    ship->get_points()[i].second ==
-                    info->computer_attack.second
-                ) {
-                    tmp = ' ';
-                    break;
-                }
-            }
-
             mvwprintw(stdscr, i - 'A' + 18, j + j + 2, "%c", tmp);
         }
 
@@ -207,21 +167,16 @@ void Display::draw_player_grid() {
     }
 }
 
-void Display::blink_control(int freq, int limit) {
-    if (counter == limit) {
-        counter = 0;
-        temp_counter = 0;
-        blink = false;
-        info->recently_attacked = false;
-    }
-    else {
-        if (temp_counter < freq) {
-            ++temp_counter;
-            ++counter;
+/*Display::task Display::animate_computer_attacks() {
+    while (!info->computer_wins && !info->player_wins) {
+        if (!info->computer_attack.empty()) {
+            thread out;
+            co_await switch_to_new_thread(out);
         }
-        else {
-            temp_counter = 0;
-            blink = !blink;
-        }
+
+        this_thread::sleep_for(chrono::milliseconds(30));
     }
 }
+
+Display::task Display::animate_player_attacks() {
+}*/

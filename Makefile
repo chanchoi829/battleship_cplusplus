@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -pedantic-errors  -Wall -g -fcoroutines
+CFLAGS = -pedantic-errors -std=c++2a -Wall -g -fcoroutines
 
 OBJS = main.o Computer.o Display.o Engine.o Grid.o Player.o Ship.o
 PROG = battleship

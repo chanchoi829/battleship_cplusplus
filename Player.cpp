@@ -49,27 +49,35 @@ void Player::turn() {
 
     lock_guard<mutex> lock2(engine.get_info()->m);
     engine.get_info()->recently_attacked = true;
-    engine.get_info()->player_attack = make_pair(row, col);
 
     // Miss
     if (computer_grid[row][col].e == Grid::Entity::Sea) {
         engine.get_computer_grid().modify_grid(row, col, Grid::Entity::Missed);
+        engine.get_info()->player_attack.push(
+            vector<pair<int, int>> (1, make_pair(row, col))
+        );
+
         return;
     }
 
     // Increment the ship's damage taken
     computer_grid[row][col].ship->inject_damage(row, col);
 
-    // When hp is 0, the ship sinks
-    if (computer_grid[row][col].ship->get_hp() == 0)
-        engine.get_computer().sink_ship();
-
     // Mark the point
     engine.get_computer_grid().modify_grid(row, col, Grid::Entity::Vessel);
 
-    // Mark points for animation
-    for (const pair<int, int>& p : computer_grid[row][col].ship->get_points())
-        computer_grid[p.first][p.second].animation = true;
+    // When hp is 0, the ship sinks
+    if (computer_grid[row][col].ship->get_hp() == 0) {
+        engine.get_computer().sink_ship();
+        engine.get_info()->player_attack.push(
+            computer_grid[row][col].ship->get_points()
+        );
+        return;
+    }
+
+    engine.get_info()->player_attack.push(
+        vector<pair<int, int>>(1, make_pair(row, col))
+    );
 }
 
 

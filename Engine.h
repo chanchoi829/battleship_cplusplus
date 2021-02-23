@@ -16,17 +16,20 @@ Engine class
 #include <thread>
 #include <memory>
 #include <mutex>
+#include <queue>
 
 #define engine Engine::get_instance()
 #define info Engine::get_instance().get_info()
 #define computer_grid engine.get_computer_grid().get_grid()
+
+typedef std::queue<std::vector<std::pair<int, int>>> Animation;
 
 class Engine {
 
 public:
     struct Information {
         std::mutex m;
-        std::pair<int, int> computer_attack, player_attack;
+        Animation computer_attack, player_attack;
         bool computer_wins, player_wins, recently_attacked;
     };
 
