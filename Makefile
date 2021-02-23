@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -pedantic-errors  -Wall -g
+CFLAGS = -pedantic-errors  -Wall -g -fcoroutines
 
 OBJS = main.o Computer.o Display.o Engine.o Grid.o Player.o Ship.o
 PROG = battleship
@@ -17,7 +17,7 @@ Computer.o: Computer.cpp Computer.h Engine.h Ship.h
 	$(CC) $(CFLAGS) -c Computer.cpp
 
 Display.o: Display.cpp Display.h Engine.h Grid.h Ship.h
-	$(CC) $(CFLAGS) -c Display.cpp
+	$(CC) $(CFLAGS) -c -fcoroutines Display.cpp
 
 Engine.o: Engine.cpp Engine.h Computer.h Display.h Grid.h Player.h Ship.h
 	$(CC) $(CFLAGS) -c Engine.cpp

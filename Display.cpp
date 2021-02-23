@@ -19,7 +19,6 @@ Display::Display() {
 }
 
 void Display::draw() {
-    initscr();
     mousemask(ALL_MOUSE_EVENTS | BUTTON1_CLICKED, NULL);
     mouseinterval(0);
     keypad(stdscr, TRUE);
@@ -56,17 +55,17 @@ void Display::draw() {
 
 // Draw computer's grid
 void Display::draw_computer_grid() {
-    wprintw(stdscr, "\n      Enemy Grid\n\n  ");
+    mvwprintw(stdscr, 0, 0, "\n      Enemy Grid\n\n  ");
 
     // Print numbers
     for (int i = 1; i <= 9; ++i)
-        wprintw(stdscr, "%d ", i);
+        mvwprintw(stdscr, 3, i + i, "%d", i);
 
-    wprintw(stdscr, "10\n");
+    mvwprintw(stdscr, 3, 20, "10\n");
 
     // Print letters
     for (char i = 'A'; i <= 'J'; ++i) {
-        wprintw(stdscr, "%c ", i);
+        mvwprintw(stdscr, 4 + i - 'A', 0, "%c", i);
 
         for (int j = 0; j < 10; ++j) {
             Grid::Entity e =
@@ -114,10 +113,10 @@ void Display::draw_computer_grid() {
                 tmp = ' ';
             }
 
-            wprintw(stdscr, "%c ", tmp);
+            mvwprintw(stdscr, 4 + i - 'A', j + j + 2,"%c", tmp);
         }
 
-        wprintw(stdscr, "\n");
+        mvwprintw(stdscr, 4 + i - 'A', 21, "\n");
     }
 }
 
