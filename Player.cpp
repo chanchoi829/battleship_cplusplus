@@ -20,7 +20,7 @@ void Player::turn() {
     int row, col;
     
     while (true) {
-        // Check if it's a click
+        // Check if it's a double click
         if (wgetch(stdscr) == KEY_MOUSE && getmouse(&event) == OK)
         {
             // Convert mouse position to row and column
@@ -49,35 +49,27 @@ void Player::turn() {
 
     lock_guard<mutex> lock2(engine.get_info()->m);
     engine.get_info()->recently_attacked = true;
+    engine.get_info()->player_attack = make_pair(row, col);
 
     // Miss
     if (computer_grid[row][col].e == Grid::Entity::Sea) {
         engine.get_computer_grid().modify_grid(row, col, Grid::Entity::Missed);
-        engine.get_info()->player_attack.push(
-            vector<pair<int, int>> (1, make_pair(row, col))
-        );
-
         return;
     }
 
     // Increment the ship's damage taken
     computer_grid[row][col].ship->inject_damage(row, col);
 
+    // When hp is 0, the ship sinks
+    if (computer_grid[row][col].ship->get_hp() == 0)
+        engine.get_computer().sink_ship();
+
     // Mark the point
     engine.get_computer_grid().modify_grid(row, col, Grid::Entity::Vessel);
 
-    // When hp is 0, the ship sinks
-    if (computer_grid[row][col].ship->get_hp() == 0) {
-        engine.get_computer().sink_ship();
-        engine.get_info()->player_attack.push(
-            computer_grid[row][col].ship->get_points()
-        );
-        return;
-    }
-
-    engine.get_info()->player_attack.push(
-        vector<pair<int, int>>(1, make_pair(row, col))
-    );
+    // Mark points for animation
+    for (const pair<int, int>& p : computer_grid[row][col].ship->get_points())
+        computer_grid[p.first][p.second].animation = true;
 }
 
 
@@ -107,6 +99,29 @@ void Player::place_ship_random(Ship::Ship_type s) {
 
 void Player::sink_ship() {
     --ships_alive;
+}
+
+// Get user's input and check if it is valid
+void Player::read_point(std::string& point) {
+    while (true) {
+        cin >> point;
+
+        // Convert to lower case
+        transform(point.begin(), point.end(), point.begin(),
+            [](unsigned char c) { return tolower(c); });
+
+        // Check the input
+        if ((point.length() != 2 && point.length() != 3) || (point[0] < 'a' || point[0] > 'j'))
+            continue;
+
+        if (point.length() == 2 && (point[1] < '1' || point[1] > '9'))
+            continue;
+
+        if (point.length() == 3 && (point[1] != '1' || point[2] != '0'))
+            continue;
+
+        break;
+    }
 }
 
 int Player::get_ships_alive() {

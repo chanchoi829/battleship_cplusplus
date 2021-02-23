@@ -11,6 +11,8 @@ using namespace std;
 
 Engine::Engine() {
     information = make_shared<Information>();
+    information->computer_attack = make_pair(-1, -1);
+    information->player_attack = make_pair(-1, -1);
     information->computer_wins = false;
     information->player_wins = false;
     information->recently_attacked = false;
@@ -26,7 +28,7 @@ Engine::Engine() {
     mousemask(ALL_MOUSE_EVENTS | BUTTON1_CLICKED, NULL);
     mouseinterval(0);
     keypad(stdscr, TRUE);
-    display_thread = thread(&Display::draw, &display);
+    display_thread = thread(&Display::draw, display);
 }
 
 // Run the game
