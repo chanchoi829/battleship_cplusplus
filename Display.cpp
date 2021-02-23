@@ -53,6 +53,22 @@ void Display::draw() {
         cout << "You win";
 }
 
+auto Display::switch_to_new_thread(thread& out) {
+    struct awaitable {
+        thread* p_out;
+        bool await_ready() { return false; }
+        void await_suspend(coroutine_handle<> h) {
+            thread& out = *p_out;
+            if (out.joinable())
+                throw std::runtime_error("Output jthread parameter not empty");
+            out = thread([h] { h.resume(); });
+        }
+        void await_resume() {}
+    };
+
+    return awaitable{&out};
+}
+
 // Draw computer's grid
 void Display::draw_computer_grid() {
     mvwprintw(stdscr, 0, 0, "\n      Enemy Grid\n\n  ");

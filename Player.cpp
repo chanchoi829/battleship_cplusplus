@@ -20,7 +20,7 @@ void Player::turn() {
     int row, col;
     
     while (true) {
-        // Check if it's a double click
+        // Check if it's a click
         if (wgetch(stdscr) == KEY_MOUSE && getmouse(&event) == OK)
         {
             // Convert mouse position to row and column
@@ -99,29 +99,6 @@ void Player::place_ship_random(Ship::Ship_type s) {
 
 void Player::sink_ship() {
     --ships_alive;
-}
-
-// Get user's input and check if it is valid
-void Player::read_point(std::string& point) {
-    while (true) {
-        cin >> point;
-
-        // Convert to lower case
-        transform(point.begin(), point.end(), point.begin(),
-            [](unsigned char c) { return tolower(c); });
-
-        // Check the input
-        if ((point.length() != 2 && point.length() != 3) || (point[0] < 'a' || point[0] > 'j'))
-            continue;
-
-        if (point.length() == 2 && (point[1] < '1' || point[1] > '9'))
-            continue;
-
-        if (point.length() == 3 && (point[1] != '1' || point[2] != '0'))
-            continue;
-
-        break;
-    }
 }
 
 int Player::get_ships_alive() {
