@@ -11,19 +11,12 @@
 
 using namespace std;
 
-
-Display::Display() {
-    blink = false;
-    counter = 0;
-    temp_counter = 0;
-}
-
 void Display::draw() {
     mousemask(ALL_MOUSE_EVENTS | BUTTON1_CLICKED, NULL);
     mouseinterval(0);
     keypad(stdscr, TRUE);
 
-    animation_thread = thread(&Display::animate_computer_attacks, this);
+    //animation_thread = thread(&Display::animate_computer_attacks, this);
 
     while (!info->computer_wins && !info->player_wins) {
         {
@@ -52,28 +45,6 @@ void Display::draw() {
     else {
         cout << "You win";
     }
-}
-
-auto Display::switch_to_new_thread(thread& out) {
-    struct awaitable {
-        thread* p_out;
-        bool await_ready() { return false; }
-        void await_suspend(coroutine_handle<> h) {
-            thread& out = *p_out;
-            if (out.joinable())
-                throw std::runtime_error("Output jthread parameter not empty");
-            out = thread([h] { h.resume(); });
-
-            for (const pair<int, int>& point : info->computer_attack.front()) {
-                mvwprintw(stdscr, point.second * 2 + 2, point.first + 18, " ");
-            }
-
-            info->computer_attack.pop();
-        }
-        void await_resume() {}
-    };
-
-    return awaitable{&out};
 }
 
 // Draw computer's grid
@@ -167,11 +138,10 @@ void Display::draw_player_grid() {
     }
 }
 
-Display::task Display::animate_computer_attacks() {
+/*Display::task Display::animate_computer_attacks() {
     while (!info->computer_wins && !info->player_wins) {
         if (!info->computer_attack.empty()) {
-            thread out;
-            co_await switch_to_new_thread(out);
+            //co_await animate_computer_attacks_co();
         }
 
         this_thread::sleep_for(chrono::milliseconds(30));
@@ -180,3 +150,19 @@ Display::task Display::animate_computer_attacks() {
 
 Display::task Display::animate_player_attacks() {
 }
+
+auto Display::animate_computer_attacks_co() {
+    struct awaitable {
+        bool await_ready() { return false; }
+        void await_suspend(coroutine_handle<> h) {
+            for (const pair<int, int>& point : info->computer_attack.front()) {
+                mvwprintw(stdscr, point.second * 2 + 2, point.first + 18, " ");
+            }
+
+            info->computer_attack.pop();
+        }
+        void await_resume() {}
+    };
+
+    return awaitable{};
+}*/
