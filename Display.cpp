@@ -65,7 +65,7 @@ void Display::draw_computer_grid() {
 
     // Print letters
     for (char i = 'A'; i <= 'J'; ++i) {
-        mvwprintw(stdscr, 4 + i - 'A', 0, "%c", i);
+        mvwprintw(stdscr, i - 'A' + 4, 0, "%c", i);
 
         for (int j = 0; j < 10; ++j) {
             Grid::Entity e =
@@ -113,26 +113,26 @@ void Display::draw_computer_grid() {
                 tmp = ' ';
             }
 
-            mvwprintw(stdscr, 4 + i - 'A', j + j + 2,"%c", tmp);
+            mvwprintw(stdscr, i - 'A' + 4, j + j + 2, "%c", tmp);
         }
 
-        mvwprintw(stdscr, 4 + i - 'A', 21, "\n");
+        mvwprintw(stdscr, i - 'A' + 4, 21, "\n");
     }
 }
 
 // Draw player's grid
 void Display::draw_player_grid() {
-    wprintw(stdscr, "\n      Your Grid\n\n  ");
+    mvwprintw(stdscr, 14, 0, "\n      Your Grid\n\n  ");
 
     // Print numbers
     for (int i = 1; i <= 9; ++i)
-        wprintw(stdscr, "%d ", i);
+        mvwprintw(stdscr, 17, i + i, "%d", i);
 
-    wprintw(stdscr, "10\n");
+    mvwprintw(stdscr, 17, 20, "10\n");
 
     // Print letters
     for (char i = 'A'; i <= 'J'; ++i) {
-        wprintw(stdscr, "%c ", i);
+        mvwprintw(stdscr, i - 'A' + 18, 0, "%c", i);
 
         for (int j = 0; j < 10; ++j) {
             Grid::Entity e =
@@ -184,10 +184,10 @@ void Display::draw_player_grid() {
                 }
             }
 
-            wprintw(stdscr, "%c ", tmp);
+            mvwprintw(stdscr, i - 'A' + 18, j + j + 2, "%c", tmp);
         }
 
-        wprintw(stdscr, "\n");
+        mvwprintw(stdscr, i - 'A' + 18, 21, "\n");
     }
 }
 
