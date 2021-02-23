@@ -23,7 +23,7 @@ void Display::draw() {
     mouseinterval(0);
     keypad(stdscr, TRUE);
 
-    //animation_thread = thread(&Display::animate_computer_attacks, this);
+    animation_thread = thread(&Display::animate_computer_attacks, this);
 
     while (!info->computer_wins && !info->player_wins) {
         {
@@ -54,7 +54,7 @@ void Display::draw() {
     }
 }
 
-/*auto Display::switch_to_new_thread(thread& out) {
+auto Display::switch_to_new_thread(thread& out) {
     struct awaitable {
         thread* p_out;
         bool await_ready() { return false; }
@@ -74,7 +74,7 @@ void Display::draw() {
     };
 
     return awaitable{&out};
-}*/
+}
 
 // Draw computer's grid
 void Display::draw_computer_grid() {
@@ -167,7 +167,7 @@ void Display::draw_player_grid() {
     }
 }
 
-/*Display::task Display::animate_computer_attacks() {
+Display::task Display::animate_computer_attacks() {
     while (!info->computer_wins && !info->player_wins) {
         if (!info->computer_attack.empty()) {
             thread out;
@@ -179,4 +179,4 @@ void Display::draw_player_grid() {
 }
 
 Display::task Display::animate_player_attacks() {
-}*/
+}
