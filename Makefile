@@ -8,7 +8,7 @@ PROG = battleship
 default: $(PROG)
 
 $(PROG): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(PROG) -lncurses -pthread -lX11 -L/usr/lib -ljpeg -lpng -ltiff
+	$(CC) $(CFLAGS) $(OBJS) -o $(PROG) -pthread -lX11 -L/usr/lib -ljpeg -lpng -ltiff
 
 main.o: main.cpp Engine.h
 	$(CC) $(CFLAGS) -c main.cpp
