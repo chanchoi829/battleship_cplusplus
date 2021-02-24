@@ -12,22 +12,30 @@
 using namespace std;
 using namespace cimg_library;
 
-Display_::Display_() {
+void Display_::draw() {
+    // Draw default grids
     sea = cimg_library::CImg<unsigned char> ("sea.jpg");
+    ship = cimg_library::CImg<unsigned char> ("ship.jpg");
     black = cimg_library::CImg<unsigned char> ("black.jpg");
 
     for (int i = 0; i < 10; ++i) {
         CImg<unsigned char> row_temp_player, row_temp_computer;
         for (int j = 0; j < 10; ++j) {
             row_temp_computer.append(black, 'x');
-            row_temp_player.append(sea, 'x');
+
+            // Assign images accordingly
+            engine;
+            if (engine.get_player_grid().get_grid()[i][j].e == Grid::Entity::Vessel) {
+                row_temp_player.append(ship, 'x');
+            }
+            else {
+                row_temp_player.append(sea, 'x');
+            }
         }
         computer_grid_image.append(row_temp_computer, 'y');
         player_grid_image.append(row_temp_player, 'y');
     }
-}
 
-void Display_::draw() {
     CImgDisplay computer_disp(computer_grid_image, "Computer Grid"),
     player_disp(player_grid_image,"Player Grid");
 

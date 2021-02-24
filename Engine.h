@@ -21,6 +21,7 @@ Engine class
 #define engine Engine::get_instance()
 #define info Engine::get_instance().get_info()
 #define computer_grid engine.get_computer_grid().get_grid()
+#define player_grid engine.get_player_grid().get_grid()
 
 typedef std::queue<std::vector<std::pair<int, int>>> Animation;
 

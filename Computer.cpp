@@ -6,7 +6,6 @@
 #include <utility>
 #include <vector>
 
-#define player_grid Engine::get_instance().get_player_grid().get_grid()
 #define can_attack(r, c) (player_grid[r][c].e == Grid::Entity::Sea || (player_grid[r][c].e == Grid::Entity::Vessel && !player_grid[r][c].ship->is_hit(r, c)))
 
 using namespace std;

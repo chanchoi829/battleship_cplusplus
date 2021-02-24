@@ -14,19 +14,15 @@ Engine::Engine() {
     information->computer_wins = false;
     information->player_wins = false;
     information->recently_attacked = false;
+}
 
+// Run the game
+void Engine::run() {
     // Intialize default grids
     computer_grid_ = Grid();
     player_grid_ = Grid();
     computer = Computer();
     player = Player();
-    display = Display_();
-
-    display_thread = thread(&Display_::draw, &display);
-}
-
-// Run the game
-void Engine::run() {
     // Create computer's grid
     player.place_ship_random(Ship::Ship_type::Destroyer);
     player.place_ship_random(Ship::Ship_type::Submarine);
@@ -41,9 +37,9 @@ void Engine::run() {
     computer.place_ship(Ship::Ship_type::Battleship);
     computer.place_ship(Ship::Ship_type::Carrier);
 
-    while (true) {
-        int hi;
-        cin >> hi;
+    display = Display_();
+    display_thread = thread(&Display_::draw, &display);
+    while (false) {
         // Player's turn
         player.turn();
         if (player.get_ships_alive() == 0) {
