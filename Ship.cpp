@@ -1,5 +1,4 @@
 #include "Ship.h"
-#include <ncurses.h>
 
 using namespace std;
 
@@ -68,11 +67,11 @@ void Ship::inject_damage(int row, int col) {
 
 // Get this ship's status
 void Ship::get_status() {
-    wprintw(stdscr, "Computer's %s (length %d):", name.c_str(), length);
+    /*wprintw(stdscr, "Computer's %s (length %d):", name.c_str(), length);
     if (hp == 0)
         wprintw(stdscr, " sunk\n");
     else
-        wprintw(stdscr, " afloat\n");
+        wprintw(stdscr, " afloat\n");*/
 }
 
 // Assign points to this ship

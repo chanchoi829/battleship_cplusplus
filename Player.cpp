@@ -3,7 +3,6 @@
 #include "Ship.h"
 #include <algorithm>
 #include <iostream>
-#include <ncurses.h>
 
 using namespace std;
 
@@ -16,36 +15,7 @@ void Player::turn() {
     for (const shared_ptr<Ship>& p : engine.get_computer_ships())
         p->reset_recently_sunk();
 
-    MEVENT event;
-    int row, col;
-    
-    while (true) {
-        // Check if it's a click
-        if (wgetch(stdscr) == KEY_MOUSE && getmouse(&event) == OK)
-        {
-            // Convert mouse position to row and column
-            row = event.y - 4;
-            col = (event.x - 2) / 2;
-        }
-        else {
-            continue;
-        }
-
-        // Check if row or column is out of range
-        if (row < 0 || row > 9 || col < 0 || col > 9) {
-            continue;
-        }
-        // Check if the point has been attacked already
-        else if (computer_grid[row][col].e == Grid::Entity::Missed ||
-            (computer_grid[row][col].e == Grid::Entity::Vessel &&
-                computer_grid[row][col].ship->is_hit(row, col))) {
-            continue;
-        }
-        else {
-            break;
-        }   
-    }
-
+    int row = 0, col = 0;
 
     lock_guard<mutex> lock2(engine.get_info()->m);
     engine.get_info()->recently_attacked = true;

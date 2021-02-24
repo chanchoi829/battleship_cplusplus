@@ -1,4 +1,10 @@
 #include "Display.h"
+
+#define cimg_use_jpeg 1
+#define cimg_use_png 1
+#define cimg_use_tiff 1
+
+#include "CImg.h"
 #include "Engine.h"
 #include "Grid.h"
 #include "Ship.h"
@@ -6,38 +12,21 @@
 #include <iostream>
 #include <memory>
 #include <mutex>
-#include <ncurses.h>
 #include <thread>
 
 using namespace std;
+using namespace cimg_library;
 
-void Display::draw() {
-    mousemask(ALL_MOUSE_EVENTS | BUTTON1_CLICKED, NULL);
-    mouseinterval(0);
-    keypad(stdscr, TRUE);
-
-    //animation_thread = thread(&Display::animate_computer_attacks, this);
+void Display_::draw() {
+    CImg<unsigned char> image("sea.jpg");
+    CImgDisplay main_disp(image,"Click a point");
 
     while (!info->computer_wins && !info->player_wins) {
         {
-            wmove(stdscr, 0, 0);
-
-            draw_computer_grid();
-            draw_player_grid();
-
-            // Show which computer ships have sunk
-            wprintw(stdscr, "\n");
-            engine.get_computer_ships()[0]->get_status();
-            engine.get_computer_ships()[1]->get_status();
-            engine.get_computer_ships()[2]->get_status();
-            engine.get_computer_ships()[3]->get_status();
-            engine.get_computer_ships()[4]->get_status();
-
-            wrefresh(stdscr);
+            
         }
         this_thread::sleep_for(chrono::milliseconds(30));
     }
-    endwin();
 
     if (info->computer_wins) {
         cout << "You Lose";
@@ -48,7 +37,7 @@ void Display::draw() {
 }
 
 // Draw computer's grid
-void Display::draw_computer_grid() {
+/*void Display::draw_computer_grid() {
     mvwprintw(stdscr, 0, 0, "\n      Enemy Grid\n\n  ");
 
     // Print numbers
@@ -91,10 +80,10 @@ void Display::draw_computer_grid() {
 
         mvwprintw(stdscr, i - 'A' + 4, 21, "\n");
     }
-}
+}*/
 
 // Draw player's grid
-void Display::draw_player_grid() {
+/*void Display::draw_player_grid() {
     mvwprintw(stdscr, 14, 0, "\n      Your Grid\n\n  ");
 
     // Print numbers
@@ -136,33 +125,4 @@ void Display::draw_player_grid() {
 
         mvwprintw(stdscr, i - 'A' + 18, 21, "\n");
     }
-}
-
-/*Display::task Display::animate_computer_attacks() {
-    while (!info->computer_wins && !info->player_wins) {
-        if (!info->computer_attack.empty()) {
-            //co_await animate_computer_attacks_co();
-        }
-
-        this_thread::sleep_for(chrono::milliseconds(30));
-    }
-}
-
-Display::task Display::animate_player_attacks() {
-}
-
-auto Display::animate_computer_attacks_co() {
-    struct awaitable {
-        bool await_ready() { return false; }
-        void await_suspend(coroutine_handle<> h) {
-            for (const pair<int, int>& point : info->computer_attack.front()) {
-                mvwprintw(stdscr, point.second * 2 + 2, point.first + 18, " ");
-            }
-
-            info->computer_attack.pop();
-        }
-        void await_resume() {}
-    };
-
-    return awaitable{};
 }*/

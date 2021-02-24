@@ -64,7 +64,7 @@ private:
     Grid computer_grid_, player_grid_;
     Computer computer;
     Player player;
-    Display display;
+    Display_ display;
 
     std::shared_ptr<Information> information;
     std::thread display_thread;

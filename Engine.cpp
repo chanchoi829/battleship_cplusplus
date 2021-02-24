@@ -5,7 +5,7 @@
 #include "Player.h"
 #include "Ship.h"
 #include <algorithm>
-#include <ncurses.h>
+#include <iostream>
 
 using namespace std;
 
@@ -20,13 +20,9 @@ Engine::Engine() {
     player_grid_ = Grid();
     computer = Computer();
     player = Player();
-    display = Display();
+    display = Display_();
 
-    initscr();
-    mousemask(ALL_MOUSE_EVENTS | BUTTON1_CLICKED, NULL);
-    mouseinterval(0);
-    keypad(stdscr, TRUE);
-    display_thread = thread(&Display::draw, &display);
+    display_thread = thread(&Display_::draw, &display);
 }
 
 // Run the game
@@ -46,6 +42,8 @@ void Engine::run() {
     computer.place_ship(Ship::Ship_type::Carrier);
 
     while (true) {
+        int hi;
+        cin >> hi;
         // Player's turn
         player.turn();
         if (player.get_ships_alive() == 0) {

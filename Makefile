@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -pedantic-errors -std=c++2a -Wall -g -fcoroutines
+CFLAGS = -pedantic-errors -Wall -g
 
 OBJS = main.o Computer.o Display.o Engine.o Grid.o Player.o Ship.o
 PROG = battleship
@@ -8,7 +8,7 @@ PROG = battleship
 default: $(PROG)
 
 $(PROG): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(PROG) -lncurses -pthread
+	$(CC) $(CFLAGS) $(OBJS) -o $(PROG) -lncurses -pthread -lX11 -L/usr/lib -ljpeg -lpng -ltiff
 
 main.o: main.cpp Engine.h
 	$(CC) $(CFLAGS) -c main.cpp
@@ -17,7 +17,7 @@ Computer.o: Computer.cpp Computer.h Engine.h Ship.h
 	$(CC) $(CFLAGS) -c Computer.cpp
 
 Display.o: Display.cpp Display.h Engine.h Grid.h Ship.h
-	$(CC) $(CFLAGS) -c -fcoroutines Display.cpp
+	$(CC) $(CFLAGS) -c Display.cpp
 
 Engine.o: Engine.cpp Engine.h Computer.h Display.h Grid.h Player.h Ship.h
 	$(CC) $(CFLAGS) -c Engine.cpp
