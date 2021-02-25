@@ -23,8 +23,8 @@ void Display_::draw() {
     // Render
     while (!info->computer_wins && !info->player_wins) {
         draw_grids();
-        info->computer_disp->render(computer_grid_img);
-        info->player_disp->render(player_grid_img);            
+        info->computer_disp->display(computer_grid_img);
+        info->player_disp->display(player_grid_img);            
         this_thread::sleep_for(chrono::milliseconds(50));
     }
  
