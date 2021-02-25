@@ -22,7 +22,7 @@ void Player::turn() {
     for (const shared_ptr<Ship>& p : engine.get_computer_ships())
         p->reset_recently_sunk();
 
-    int row, col;
+    int row = -1, col = -1;
 
     while (true) {
         CImgDisplay::wait(*Engine::get_instance().get_info()->computer_disp);
