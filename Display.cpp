@@ -14,9 +14,10 @@ using namespace cimg_library;
 
 Display_::Display_() {
     // Load images
-    sea_img = cimg_library::CImg<unsigned char> ("sea.jpg");
-    ship_img = cimg_library::CImg<unsigned char> ("ship.jpg");
-    black_img = cimg_library::CImg<unsigned char> ("black.jpg");
+    sea_img = CImg<unsigned char> ("sea.jpg");
+    ship_img = CImg<unsigned char> ("ship.jpg");
+    black_img = CImg<unsigned char> ("black.jpg");
+    red_img = CImg<unsigned char> ("red.jpg");
 }
 
 void Display_::draw() {
@@ -56,7 +57,7 @@ void Display_::draw_grids() {
                     break;
                 case Grid::Entity::Vessel:
                     if (ship->is_hit(i, j)) {
-                        row_temp_computer.append(ship_img, 'x');
+                        row_temp_computer.append(red_img, 'x');
                     }
                     else {
                         row_temp_computer.append(black_img, 'x');
@@ -76,7 +77,7 @@ void Display_::draw_grids() {
                     break;
                 case Grid::Entity::Vessel:
                     if (ship->is_hit(i, j)) {
-                        row_temp_player.append(black_img, 'x');
+                        row_temp_player.append(red_img, 'x');
                     }
                     else {
                         row_temp_player.append(ship_img, 'x');

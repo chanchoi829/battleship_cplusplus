@@ -16,7 +16,7 @@ public:
     void create_display();
 private:
 	cimg_library::CImg<unsigned char> computer_grid_img, 
-	player_grid_img, sea_img, ship_img, black_img;
+	player_grid_img, sea_img, ship_img, black_img, red_img;
 
 
 };
