@@ -34,7 +34,7 @@ void Player::turn() {
             row = y / 25;
             col = x / 25;
 
-            cout << row << " " << col << endl;
+            //cout << row << " " << col << endl;
         }
 
         // Check if row or column is out of range
