@@ -31,8 +31,10 @@ void Player::turn() {
             int x = Engine::get_instance().get_info()->computer_disp->mouse_x();
             int y = Engine::get_instance().get_info()->computer_disp->mouse_y();
 
-            row = y % 25;
-            col = x % 25;
+            row = y / 25;
+            col = x / 25;
+
+            cout << row << " " << col << endl;
         }
 
         // Check if row or column is out of range
