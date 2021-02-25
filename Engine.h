@@ -5,6 +5,11 @@ Engine class
 #ifndef ENGINE_H
 #define ENGINE_H
 
+#define cimg_use_jpeg 1
+#define cimg_use_png 1
+#define cimg_use_tiff 1
+
+#include "CImg.h"
 #include "Computer.h"
 #include "Display.h"
 #include "Grid.h"
@@ -31,6 +36,7 @@ public:
     struct Information {
         std::mutex m;
         Animation computer_attack, player_attack;
+        std::shared_ptr<cimg_library::CImgDisplay> computer_disp, player_disp;
         bool computer_wins, player_wins, recently_attacked;
     };
 

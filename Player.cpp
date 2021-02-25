@@ -1,10 +1,17 @@
 #include "Player.h"
+
+#define cimg_use_jpeg 1
+#define cimg_use_png 1
+#define cimg_use_tiff 1
+
+#include "CImg.h"
 #include "Engine.h"
 #include "Ship.h"
 #include <algorithm>
 #include <iostream>
 
 using namespace std;
+using namespace cimg_library;
 
 Player::Player() {
     ships_alive = 5;
@@ -15,7 +22,33 @@ void Player::turn() {
     for (const shared_ptr<Ship>& p : engine.get_computer_ships())
         p->reset_recently_sunk();
 
-    int row = 0, col = 0;
+    int row, col;
+
+    while (true) {
+        CImgDisplay::wait(*Engine::get_instance().get_info()->computer_disp);
+
+        if (Engine::get_instance().get_info()->computer_disp->button()) {
+            int x = Engine::get_instance().get_info()->computer_disp->mouse_x();
+            int y = Engine::get_instance().get_info()->computer_disp->mouse_y();
+
+            row = y % 25;
+            col = x % 25;
+        }
+
+        // Check if row or column is out of range
+        if (row < 0 || row > 9 || col < 0 || col > 9) {
+            continue;
+        }
+        // Check if the point has been attacked already
+        else if (computer_grid[row][col].e == Grid::Entity::Missed ||
+            (computer_grid[row][col].e == Grid::Entity::Vessel &&
+                computer_grid[row][col].ship->is_hit(row, col))) {
+            continue;
+        }
+        else {
+            break;
+        }   
+    }
 
     lock_guard<mutex> lock2(engine.get_info()->m);
     engine.get_info()->recently_attacked = true;

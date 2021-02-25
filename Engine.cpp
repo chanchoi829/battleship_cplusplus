@@ -37,9 +37,13 @@ void Engine::run() {
     computer.place_ship(Ship::Ship_type::Battleship);
     computer.place_ship(Ship::Ship_type::Carrier);
 
+    // Create a display
     display = Display_();
+    display.draw_grids();
+    display.create_display();
     display_thread = thread(&Display_::draw, &display);
-    while (false) {
+
+    while (true) {
         // Player's turn
         player.turn();
         if (player.get_ships_alive() == 0) {
