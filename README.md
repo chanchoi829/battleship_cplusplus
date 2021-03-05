@@ -22,7 +22,6 @@ Make sure you have a display server running.
 
 ### How to Play
 
-**Choose Difficulty**
 ![Alt Text](demo.gif)
 
 ### Bug List
