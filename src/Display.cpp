@@ -14,10 +14,10 @@ using namespace cimg_library;
 
 Display_::Display_() {
     // Load images
-    sea_img = CImg<unsigned char> ("./images/sea.jpg");
-    ship_img = CImg<unsigned char> ("./images/ship.jpg");
-    black_img = CImg<unsigned char> ("./images/black.jpg");
-    red_img = CImg<unsigned char> ("./images/red.jpg");
+    sea_img = CImg<unsigned char> ("../images/sea.jpg");
+    ship_img = CImg<unsigned char> ("../images/ship.jpg");
+    black_img = CImg<unsigned char> ("../images/black.jpg");
+    red_img = CImg<unsigned char> ("../images/red.jpg");
 }
 
 void Display_::draw() {
