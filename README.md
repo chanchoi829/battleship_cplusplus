@@ -2,7 +2,7 @@
 
 Battleship is a fun game where your goal is to sink the enemy(computer)'s ships.
 
-![alt text](program_overview.JPG)
+![alt text](./images/program_overview.JPG)
 
 ### Build Instructions
 Git clone:
@@ -25,5 +25,5 @@ Make sure you have a display server running.
 
 ### How to Play
 
-![Alt Text](demo.gif)
+![Alt Text](./misc/demo.gif)
 

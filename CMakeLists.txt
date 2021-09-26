@@ -18,6 +18,7 @@ set(EXECUTABLE_SOURCES
     ${PROJECT_SOURCE_DIR}/src/Ship.cpp
 )
 
+# Define the binary
 add_executable(${PROJECT_NAME} ${EXECUTABLE_SOURCES})
 
 # Find required libraries
@@ -27,6 +28,6 @@ find_library(JPEG jpeg REQUIRED)
 find_library(TIFF tiff REQUIRED)
 find_library(X11 X11 REQUIRED)
 
-
+# Link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PTHREAD} ${PNG} ${JPEG} ${TIFF}
     ${X11})
