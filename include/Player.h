@@ -4,7 +4,8 @@
 #include "Ship.h"
 #include <string>
 
-class Player {
+class Player
+{
 public:
     Player();
     // Simulate player's turn

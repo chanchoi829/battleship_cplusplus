@@ -13,12 +13,14 @@
 using namespace std;
 using namespace cimg_library;
 
-Player::Player() {
+Player::Player()
+{
     ships_alive = 5;
 }
 
 // Simulate player's turn
-void Player::turn() {
+void Player::turn()
+{
     for (const shared_ptr<Ship>& p : engine.get_computer_ships())
         p->reset_recently_sunk();
 
@@ -34,7 +36,7 @@ void Player::turn() {
             row = y / 25;
             col = x / 25;
 
-            //cout << row << " " << col << endl;
+            // cout << row << " " << col << endl;
         }
 
         // Check if row or column is out of range
@@ -42,14 +44,12 @@ void Player::turn() {
             continue;
         }
         // Check if the point has been attacked already
-        else if (computer_grid[row][col].e == Grid::Entity::Missed ||
-            (computer_grid[row][col].e == Grid::Entity::Vessel &&
-                computer_grid[row][col].ship->is_hit(row, col))) {
+        else if (computer_grid[row][col].e == Grid::Entity::Missed
+            || (computer_grid[row][col].e == Grid::Entity::Vessel && computer_grid[row][col].ship->is_hit(row, col))) {
             continue;
-        }
-        else {
+        } else {
             break;
-        }   
+        }
     }
 
     lock_guard<mutex> lock2(engine.get_info()->m);
@@ -58,9 +58,7 @@ void Player::turn() {
     // Miss
     if (computer_grid[row][col].e == Grid::Entity::Sea) {
         engine.get_computer_grid().modify_grid(row, col, Grid::Entity::Missed);
-        engine.get_info()->player_attack.push(
-            vector<pair<int, int>> (1, make_pair(row, col))
-        );
+        engine.get_info()->player_attack.push(vector<pair<int, int>>(1, make_pair(row, col)));
 
         return;
     }
@@ -74,28 +72,23 @@ void Player::turn() {
     // When hp is 0, the ship sinks
     if (computer_grid[row][col].ship->get_hp() == 0) {
         engine.get_computer().sink_ship();
-        engine.get_info()->player_attack.push(
-            computer_grid[row][col].ship->get_points()
-        );
+        engine.get_info()->player_attack.push(computer_grid[row][col].ship->get_points());
         return;
     }
 
-    engine.get_info()->player_attack.push(
-        vector<pair<int, int>>(1, make_pair(row, col))
-    );
+    engine.get_info()->player_attack.push(vector<pair<int, int>>(1, make_pair(row, col)));
 }
 
-
-void Player::place_ship_random(Ship::Ship_type s) {
+void Player::place_ship_random(Ship::Ship_type s)
+{
     shared_ptr<Ship> new_ship = make_shared<Ship>(s);
 
     // Direction: left, up, right, down
-    vector<int> points, directions = { -1, -10, 1, 10 };;
+    vector<int> points, directions = {-1, -10, 1, 10};
+    ;
 
     // Generate random positions until the ship fits
-    while (!engine.get_player_grid().is_valid(points, rand() % 100,
-        directions[rand() % 4], new_ship->get_hp()))
-    {
+    while (!engine.get_player_grid().is_valid(points, rand() % 100, directions[rand() % 4], new_ship->get_hp())) {
     }
 
     vector<pair<int, int>> converted;
@@ -110,10 +103,12 @@ void Player::place_ship_random(Ship::Ship_type s) {
     engine.push_player_ship(new_ship);
 }
 
-void Player::sink_ship() {
+void Player::sink_ship()
+{
     --ships_alive;
 }
 
-int Player::get_ships_alive() {
+int Player::get_ships_alive()
+{
     return ships_alive;
 }

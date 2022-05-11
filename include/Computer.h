@@ -4,7 +4,8 @@
 #include "Ship.h"
 #include <string>
 
-class Computer {
+class Computer
+{
 public:
     Computer();
     // Simulate computer's turn

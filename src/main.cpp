@@ -3,7 +3,8 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     // Set the seed for rand()
     srand(time(NULL));
     engine.run();

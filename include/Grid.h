@@ -6,19 +6,22 @@
 #include <utility>
 #include <vector>
 
-class Grid {
+class Grid
+{
 
 public:
     Grid();
 
-    enum class Entity {
+    enum class Entity
+    {
         Unknown,
         Vessel,
         Missed,
-        Sea, 
+        Sea,
     };
 
-    struct Cell {
+    struct Cell
+    {
         Entity e = Entity::Sea;
         std::shared_ptr<Ship> ship;
         bool animation = false;

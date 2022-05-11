@@ -12,32 +12,34 @@
 using namespace std;
 using namespace cimg_library;
 
-Display_::Display_() {
+Display_::Display_()
+{
     // Load images
-    sea_img = CImg<unsigned char> ("../images/sea.jpg");
-    ship_img = CImg<unsigned char> ("../images/ship.jpg");
-    black_img = CImg<unsigned char> ("../images/black.jpg");
-    red_img = CImg<unsigned char> ("../images/red.jpg");
+    sea_img = CImg<unsigned char>("../images/sea.jpg");
+    ship_img = CImg<unsigned char>("../images/ship.jpg");
+    black_img = CImg<unsigned char>("../images/black.jpg");
+    red_img = CImg<unsigned char>("../images/red.jpg");
 }
 
-void Display_::draw() {
+void Display_::draw()
+{
     // Render
     while (!info->computer_wins && !info->player_wins) {
         draw_grids();
         info->computer_disp->display(computer_grid_img);
-        info->player_disp->display(player_grid_img);            
+        info->player_disp->display(player_grid_img);
         this_thread::sleep_for(chrono::milliseconds(50));
     }
- 
+
     if (info->computer_wins) {
         cout << "You Lose";
-    }
-    else {
+    } else {
         cout << "You win";
     }
 }
 
-void Display_::draw_grids() {
+void Display_::draw_grids()
+{
     CImg<unsigned char> computer_grid_temp, player_grid_temp;
     for (int i = 0; i < 10; ++i) {
         CImg<unsigned char> row_temp_player, row_temp_computer;
@@ -48,21 +50,20 @@ void Display_::draw_grids() {
             shared_ptr<Ship> ship = engine.get_computer_grid().get_grid()[i][j].ship;
 
             switch (point) {
-                case Grid::Entity::Unknown:
-                case Grid::Entity::Sea:
+            case Grid::Entity::Unknown:
+            case Grid::Entity::Sea:
+                row_temp_computer.append(black_img, 'x');
+                break;
+            case Grid::Entity::Missed:
+                row_temp_computer.append(sea_img, 'x');
+                break;
+            case Grid::Entity::Vessel:
+                if (ship->is_hit(i, j)) {
+                    row_temp_computer.append(red_img, 'x');
+                } else {
                     row_temp_computer.append(black_img, 'x');
-                    break;
-                case Grid::Entity::Missed:
-                    row_temp_computer.append(sea_img, 'x');
-                    break;
-                case Grid::Entity::Vessel:
-                    if (ship->is_hit(i, j)) {
-                        row_temp_computer.append(red_img, 'x');
-                    }
-                    else {
-                        row_temp_computer.append(black_img, 'x');
-                    }
-                    break;
+                }
+                break;
             }
 
             // Assign images for player's grid accordingly
@@ -70,19 +71,18 @@ void Display_::draw_grids() {
             ship = engine.get_player_grid().get_grid()[i][j].ship;
 
             switch (point) {
-                case Grid::Entity::Unknown:
-                case Grid::Entity::Sea:
-                case Grid::Entity::Missed:
-                    row_temp_player.append(sea_img, 'x');
-                    break;
-                case Grid::Entity::Vessel:
-                    if (ship->is_hit(i, j)) {
-                        row_temp_player.append(red_img, 'x');
-                    }
-                    else {
-                        row_temp_player.append(ship_img, 'x');
-                    }
-                    break;
+            case Grid::Entity::Unknown:
+            case Grid::Entity::Sea:
+            case Grid::Entity::Missed:
+                row_temp_player.append(sea_img, 'x');
+                break;
+            case Grid::Entity::Vessel:
+                if (ship->is_hit(i, j)) {
+                    row_temp_player.append(red_img, 'x');
+                } else {
+                    row_temp_player.append(ship_img, 'x');
+                }
+                break;
             }
         }
 
@@ -94,7 +94,8 @@ void Display_::draw_grids() {
     player_grid_img = move(player_grid_temp);
 }
 
-void Display_::create_display() {
+void Display_::create_display()
+{
     info->computer_disp = make_shared<CImgDisplay>(computer_grid_img, "Computer Grid");
     info->player_disp = make_shared<CImgDisplay>(player_grid_img, "Player Grid");
 }

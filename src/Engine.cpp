@@ -9,7 +9,8 @@
 
 using namespace std;
 
-Engine::Engine() {
+Engine::Engine()
+{
     information = make_shared<Information>();
     information->computer_wins = false;
     information->player_wins = false;
@@ -17,7 +18,8 @@ Engine::Engine() {
 }
 
 // Run the game
-void Engine::run() {
+void Engine::run()
+{
     // Intialize default grids
     computer_grid_ = Grid();
     player_grid_ = Grid();
@@ -62,45 +64,55 @@ void Engine::run() {
     display_thread.join();
 }
 
-void Engine::push_computer_ship(shared_ptr<Ship> ship) {
+void Engine::push_computer_ship(shared_ptr<Ship> ship)
+{
     lock_guard<mutex> lock(information->m);
     computer_ships.push_back(ship);
 }
 
-void Engine::push_player_ship(shared_ptr<Ship> ship) {
+void Engine::push_player_ship(shared_ptr<Ship> ship)
+{
     player_ships.push_back(ship);
 }
 
 // For Singleton
-Engine& Engine::get_instance() {
+Engine& Engine::get_instance()
+{
     static Engine the_game;
     return the_game;
 }
 
 // Getters
-vector<shared_ptr<Ship>>& Engine::get_computer_ships() {
+vector<shared_ptr<Ship>>& Engine::get_computer_ships()
+{
     return computer_ships;
 }
 
-vector<shared_ptr<Ship>>& Engine::get_player_ships() {
+vector<shared_ptr<Ship>>& Engine::get_player_ships()
+{
     return player_ships;
 }
 
-Grid& Engine::get_computer_grid() {
+Grid& Engine::get_computer_grid()
+{
     return computer_grid_;
 }
 
-Grid& Engine::get_player_grid() {
+Grid& Engine::get_player_grid()
+{
     return player_grid_;
 }
 
-Computer& Engine::get_computer() {
+Computer& Engine::get_computer()
+{
     return computer;
 }
 
-Player& Engine::get_player() {
+Player& Engine::get_player()
+{
     return player;
 }
-shared_ptr<Engine::Information> Engine::get_info() {
+shared_ptr<Engine::Information> Engine::get_info()
+{
     return information;
 }

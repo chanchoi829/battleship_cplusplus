@@ -30,10 +30,12 @@ Engine class
 
 typedef std::queue<std::vector<std::pair<int, int>>> Animation;
 
-class Engine {
+class Engine
+{
 
 public:
-    struct Information {
+    struct Information
+    {
         std::mutex m;
         Animation computer_attack, player_attack;
         std::shared_ptr<cimg_library::CImgDisplay> computer_disp, player_disp;
@@ -60,13 +62,14 @@ public:
     // Disallow copy/move construction or assignment
     Engine(Engine& obj) = delete;
     Engine(Engine&& obj) = delete;
-    Engine& operator= (Engine& obj) = delete;
-    Engine& operator= (Engine&& obj) = delete;
+    Engine& operator=(Engine& obj) = delete;
+    Engine& operator=(Engine&& obj) = delete;
 
 private:
     // create the initial objects
     Engine();
-    ~Engine(){}
+    ~Engine()
+    { }
 
     Grid computer_grid_, player_grid_;
     Computer computer;
